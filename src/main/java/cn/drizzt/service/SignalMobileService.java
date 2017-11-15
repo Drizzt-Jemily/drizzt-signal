@@ -26,6 +26,10 @@ public class SignalMobileService {
         criteria.andAreaCodeEqualTo(areaCode);
         return signalMobileMapper.selectByExample(example);
     }
+    
+    public void add(SignalMobile signalMobile) {
+        signalMobileMapper.insertSelective(signalMobile);
+    }
 
     
 }
