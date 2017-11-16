@@ -1,4 +1,4 @@
-package cn.drizzt.model;
+package cn.drizzt.entity;
 
 import java.util.ArrayList;
 import java.util.List;

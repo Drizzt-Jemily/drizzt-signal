@@ -5,10 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import cn.drizzt.entity.SignalMobile;
+import cn.drizzt.entity.SignalMobileExample;
+import cn.drizzt.entity.SignalMobileExample.Criteria;
 import cn.drizzt.mapper.SignalMobileMapper;
-import cn.drizzt.model.SignalMobile;
-import cn.drizzt.model.SignalMobileExample;
-import cn.drizzt.model.SignalMobileExample.Criteria;
 
 @Service
 public class SignalMobileService {

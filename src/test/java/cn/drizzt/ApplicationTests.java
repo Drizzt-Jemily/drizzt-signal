@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import cn.drizzt.model.SignalMobile;
+import cn.drizzt.entity.SignalMobile;
 import cn.drizzt.service.SignalMobileService;
 
 @RunWith(SpringRunner.class)

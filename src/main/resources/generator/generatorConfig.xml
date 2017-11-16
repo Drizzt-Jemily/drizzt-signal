@@ -23,7 +23,7 @@
 			password="drizzt">
 		</jdbcConnection>
 
-		<javaModelGenerator targetPackage="cn.drizzt.model"
+		<javaModelGenerator targetPackage="cn.drizzt.entity"
 			targetProject="./project" />
 
 		<sqlMapGenerator targetPackage="cn.drizzt.mapper"
