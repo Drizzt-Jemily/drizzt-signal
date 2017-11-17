@@ -10,26 +10,21 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 import cn.drizzt.listener.AuthMessageDelegateListener;
+import cn.drizzt.util.Const;
 
 @Configuration
 public class RedisConfig {
 
 	@Bean
-	RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory connectionFactory) {
+	RedisTemplate<String, String> redisTemplate(RedisConnectionFactory connectionFactory) {
 		return new StringRedisTemplate(connectionFactory);
 	}
-
-	// @Bean
-	// JdkSerializationRedisSerializer jdkSerializer() {
-	// return new JdkSerializationRedisSerializer();
-	// }
 
 	@Bean
 	MessageListenerAdapter authMessageListener() {
 		AuthMessageDelegateListener authMessageDelegateListener = new AuthMessageDelegateListener();
 		MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(authMessageDelegateListener,
 				"handleMessage");
-		// messageListenerAdapter.setSerializer(jdkSerializer());
 		return messageListenerAdapter;
 	}
 
@@ -37,7 +32,7 @@ public class RedisConfig {
 	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
 		container.setConnectionFactory(connectionFactory);
-		container.addMessageListener(authMessageListener(), new PatternTopic("auth"));
+		container.addMessageListener(authMessageListener(), new PatternTopic(Const.AUTH_TOPIC));
 		return container;
 	}
 

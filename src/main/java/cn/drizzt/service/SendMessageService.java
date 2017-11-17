@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public class SendMessageService {
 
 	@Autowired
-	private RedisTemplate<String, Object> redisTemplate;
+	private RedisTemplate<String, String> redisTemplate;
 
 	public void sendMessage(String channel, String message) {
 		redisTemplate.convertAndSend(channel, message);
