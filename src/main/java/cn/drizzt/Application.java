@@ -1,10 +1,7 @@
 package cn.drizzt;
 
-import javax.sound.midi.Receiver;
-
 import org.mybatis.spring.annotation.MapperScan;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,13 +11,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+import cn.drizzt.thread.PublicResource;
+
 @Controller
 @EnableWebMvc
 @SpringBootApplication
 @MapperScan(basePackages = "cn.drizzt.mapper")
 public class Application extends WebMvcConfigurerAdapter implements CommandLineRunner {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Receiver.class);
+	@Autowired
+	private PublicResource publicResource;
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Application.class, args);
@@ -28,7 +28,7 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
 
 	@Override
 	public void run(String... args) throws Exception {
-		LOGGER.info("服务启动完成!");
+		publicResource.init();
 	}
 
 	@RequestMapping("/")
