@@ -19,8 +19,11 @@ public class PublicResource {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PublicResource.class);
 
 	@Autowired
-    private AuthDispatcher authDispatcher;
-	
+	private AuthDispatcher authDispatcher;
+
+	@Autowired
+	private DialDispatcher dialDispatcher;
+
 	private Map<Integer, ChManager> chManagerPool;
 
 	public void init() throws Exception {
@@ -36,12 +39,17 @@ public class PublicResource {
 					chManagerPool.put(j, new ChManager(j));
 				}
 			}
-			
+
 			new Thread(authDispatcher).start();
-			
+			new Thread(dialDispatcher).start();
+
 		} else {
 			LOGGER.info("板卡启动失败:" + ShUtil.INSTANCE.SsmGetLastErrMsgA());
 		}
+	}
+
+	public Map<Integer, ChManager> getChManagerPool() {
+		return chManagerPool;
 	}
 
 	public void resetChManager(int ch) {
@@ -52,8 +60,6 @@ public class PublicResource {
 		ChManager chManager = null;
 		for (Entry<Integer, ChManager> entry : chManagerPool.entrySet()) {
 			if (!entry.getValue().isUseStatus()) {
-				entry.getValue().setUseStatus(true);
-				entry.getValue().setStartTime(System.currentTimeMillis());
 				return entry.getValue();
 			} else { // 释放过期通道
 				if (System.currentTimeMillis() - entry.getValue().getStartTime() > Const.CHMANAGER_TIMEOUT) {
