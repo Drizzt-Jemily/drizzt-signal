@@ -2,7 +2,7 @@ package cn.drizzt.entity;
 
 import javax.persistence.Id;
 
-public class SignalAuth {
+public class SignalAuth extends BaseEntity {
 	@Id
 	private String id;
 
