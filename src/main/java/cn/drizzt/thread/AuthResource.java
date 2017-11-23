@@ -49,6 +49,7 @@ public class AuthResource {
 			transTable.put("忙", Const.CALL_RESULT_3);
 			transTable.put("接通", Const.CALL_RESULT_3);
 			transTable.put("不方便", Const.CALL_RESULT_3);
+			transTable.put("不要", Const.CALL_RESULT_3);
 			transTable.put("限制", Const.CALL_RESULT_4);
 			transTable.put("设置", Const.CALL_RESULT_4);
 			transTable.put("关机", Const.CALL_RESULT_5);

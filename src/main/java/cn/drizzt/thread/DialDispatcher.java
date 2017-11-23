@@ -94,15 +94,16 @@ public class DialDispatcher implements Runnable {
 
 				// 初始化
 				int autoDial = chManager.getAutoDial();
+				int toneAnalyze = chManager.getToneAnalyze();
 				int recordStatus = chManager.getRecordStatus();
 
 				// 监听通道数据
 				int ssmChkAutoDial = ShUtil.INSTANCE.SsmChkAutoDial(ch);
-				int detectBargeIn = ShUtil.INSTANCE.SsmDetectBargeIn(ch);
-				int toneAnalyzeResult = ShUtil.INSTANCE.SsmGetToneAnalyzeResult(ch);
+				int ssmDetectBargeIn = ShUtil.INSTANCE.SsmDetectBargeIn(ch);
+				int ssmGetToneAnalyzeResult = ShUtil.INSTANCE.SsmGetToneAnalyzeResult(ch);
 				int ssmChkRecToFile = ShUtil.INSTANCE.SsmChkRecToFile(ch);
-				LOGGER.info("ID：" + chManager.getId() + ",通道号：" + ch + ",autoDial状态：" + ssmChkAutoDial + ",tone状态："
-						+ toneAnalyzeResult + ",bargeIn状态：" + detectBargeIn + ",录音状态：" + ssmChkRecToFile);
+				LOGGER.debug("ID：" + chManager.getId() + ",通道号：" + ch + ",autoDial状态：" + ssmChkAutoDial + ",tone状态："
+						+ ssmGetToneAnalyzeResult + ",bargeIn状态：" + ssmDetectBargeIn + ",录音状态：" + ssmChkRecToFile);
 
 				// 录音状态判断，如果录音完毕则挂断
 				if (recordStatus == 0 && ssmChkRecToFile == 1) {
@@ -114,12 +115,19 @@ public class DialDispatcher implements Runnable {
 					b = false;
 				}
 
+				// toneAnalyze判断逻辑
+				if (ssmGetToneAnalyzeResult == 3 || ssmGetToneAnalyzeResult == 6) {
+					if (toneAnalyze == 0) {
+						chManager.setToneAnalyze(ssmGetToneAnalyzeResult);
+					}
+				}
+
 				// autoDial判断逻辑
 				if (ssmChkAutoDial == 2 || ssmChkAutoDial == 11) {
 					if (autoDial == 0) {
 						chManager.setAutoDial(ssmChkAutoDial);
 					}
-					if (recordStatus == 0 && detectBargeIn == 1) {
+					if (recordStatus == 0 && ssmDetectBargeIn == 1) {
 						chManager.setStartRecordDur(System.currentTimeMillis() - chManager.getStartTime());
 						ShUtil.INSTANCE.SsmRecToFile(ch,
 								Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav", -2, 0, 65535,
@@ -178,6 +186,15 @@ public class DialDispatcher implements Runnable {
 
 			// 设置持续时间
 			chManager.setDuration(System.currentTimeMillis() - chManager.getStartTime());
+
+			// 删除录音文件
+			File pcmFile = new File(Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav");
+			if (pcmFile.exists()) {
+				boolean d = pcmFile.delete();
+				if (!d) {
+					LOGGER.error("文件删除失败：" + chManager.getId() + ".wav");
+				}
+			}
 
 			// 属性拷贝并保存数据库
 			SignalAuth signalAuth = new SignalAuth();

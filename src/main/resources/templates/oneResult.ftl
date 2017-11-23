@@ -4,7 +4,7 @@
 <head>
 <base id="base" href="${base}">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>等待页面</title>
+<title>单个号码测试结果</title>
 </head>
 <body>
 	<br>
@@ -13,13 +13,16 @@
 	<br>
 	<br>
 	<center>
-		<#if id =='-99'>
-			未授权
-		<#elseif id =='-98'>
-			号码格式不正确
-		<#else>
-			<a href="${base}/auth/oneResult/${id}">查询结果</a>
-		</#if>
+		<table border="1">
+			<tr>
+				<td>手机号码</td>
+				<td>状态</td>
+			</tr>
+				<tr>
+					<td>${calling}</td>
+					<td>${cr}</td>
+				</tr>
+		</table><br>
 		<a href="${base}/" target="_self">返回</a>
 	</center>
 </body>

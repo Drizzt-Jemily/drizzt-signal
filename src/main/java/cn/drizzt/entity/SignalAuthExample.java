@@ -770,6 +770,66 @@ public class SignalAuthExample {
             return (Criteria) this;
         }
 
+        public Criteria andToneAnalyzeIsNull() {
+            addCriterion("tone_analyze is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeIsNotNull() {
+            addCriterion("tone_analyze is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeEqualTo(Integer value) {
+            addCriterion("tone_analyze =", value, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeNotEqualTo(Integer value) {
+            addCriterion("tone_analyze <>", value, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeGreaterThan(Integer value) {
+            addCriterion("tone_analyze >", value, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("tone_analyze >=", value, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeLessThan(Integer value) {
+            addCriterion("tone_analyze <", value, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeLessThanOrEqualTo(Integer value) {
+            addCriterion("tone_analyze <=", value, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeIn(List<Integer> values) {
+            addCriterion("tone_analyze in", values, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeNotIn(List<Integer> values) {
+            addCriterion("tone_analyze not in", values, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeBetween(Integer value1, Integer value2) {
+            addCriterion("tone_analyze between", value1, value2, "toneAnalyze");
+            return (Criteria) this;
+        }
+
+        public Criteria andToneAnalyzeNotBetween(Integer value1, Integer value2) {
+            addCriterion("tone_analyze not between", value1, value2, "toneAnalyze");
+            return (Criteria) this;
+        }
+
         public Criteria andRecordStatusIsNull() {
             addCriterion("record_status is null");
             return (Criteria) this;

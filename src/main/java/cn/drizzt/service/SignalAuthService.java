@@ -37,5 +37,9 @@ public class SignalAuthService {
 	public void update(SignalAuth signalAuth){
 		signalAuthMapper.updateByPrimaryKeySelective(signalAuth);
 	}
+	
+	public SignalAuth getById(String id){
+		return signalAuthMapper.selectByPrimaryKey(id);
+	}
 
 }

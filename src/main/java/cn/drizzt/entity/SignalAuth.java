@@ -24,6 +24,8 @@ public class SignalAuth {
 
 	private Integer autoDial;
 
+	private Integer toneAnalyze;
+
 	private Integer recordStatus;
 
 	private Integer callResult;
@@ -106,6 +108,14 @@ public class SignalAuth {
 
 	public void setAutoDial(Integer autoDial) {
 		this.autoDial = autoDial;
+	}
+
+	public Integer getToneAnalyze() {
+		return toneAnalyze;
+	}
+
+	public void setToneAnalyze(Integer toneAnalyze) {
+		this.toneAnalyze = toneAnalyze;
 	}
 
 	public Integer getRecordStatus() {
