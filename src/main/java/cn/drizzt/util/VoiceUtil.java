@@ -106,13 +106,13 @@ public class VoiceUtil {
     }
 
     public static void main(String[] args) throws Exception {
-//        VoiceUtil.getToken();
-    	token = "24.bffc5cc38424472197ae587580f5f0c1.2592000.1513994548.282335-7672161";
+        VoiceUtil.getToken();
+//    	token = "24.bffc5cc38424472197ae587580f5f0c1.2592000.1513994548.282335-7672161";
     	String translation = VoiceUtil.getTranslation("32.wav");
-    	if(translation.equals("error3302")){
-    		VoiceUtil.getToken();
-        	translation = VoiceUtil.getTranslation("32.wav");
-    	}
+//    	if(translation.equals("error3302")){
+//    		VoiceUtil.getToken();
+//        	translation = VoiceUtil.getTranslation("32.wav");
+//    	}
         System.out.println("结果：" + translation);
     }
 }
