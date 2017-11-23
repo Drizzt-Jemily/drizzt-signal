@@ -24,7 +24,7 @@ public class SignalAuthService {
 	public SignalAuth getWaitAuth() {
 		SignalAuthExample example = new SignalAuthExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andCallStatusEqualTo(Const.CALL_STATUS_0);
+		criteria.andCallResultEqualTo(Const.CALL_RESULT_0);
 		example.setOrderByClause("start_time asc");
 		List<SignalAuth> signalAuthList = signalAuthMapper.selectByExample(example);
 		if (signalAuthList.size() > 0) {

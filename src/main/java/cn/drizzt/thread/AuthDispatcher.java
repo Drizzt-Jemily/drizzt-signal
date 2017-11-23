@@ -19,7 +19,7 @@ public class AuthDispatcher implements Runnable {
 	private static Logger LOGGER = Logger.getLogger(AuthDispatcher.class);
 
 	@Autowired
-	private PublicResource publicResource;
+	private AuthResource authResource;
 
 	@Autowired
 	private SignalAuthService signalAuthService;
@@ -28,9 +28,9 @@ public class AuthDispatcher implements Runnable {
 		while (true) {
 			SignalAuth waitAuth = signalAuthService.getWaitAuth();
 			if (waitAuth != null) {
-				ChManager freeChManager = publicResource.getFreeChManager();
+				ChManager freeChManager = authResource.getFreeChManager();
 				if (freeChManager != null) {
-					waitAuth.setCallStatus(Const.CALL_STATUS_99);
+					waitAuth.setCallResult(Const.CALL_RESULT_99);
 					signalAuthService.update(waitAuth);
 					freeChManager.setId(waitAuth.getId());
 					freeChManager.setCalling(waitAuth.getCalling());

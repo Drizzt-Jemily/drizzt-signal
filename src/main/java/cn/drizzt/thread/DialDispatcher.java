@@ -1,19 +1,25 @@
 package cn.drizzt.thread;
 
+import java.io.File;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cn.drizzt.entity.SignalAuth;
 import cn.drizzt.model.ChManager;
+import cn.drizzt.service.SignalAuthService;
 import cn.drizzt.util.Const;
 import cn.drizzt.util.ExceptionConstans;
 import cn.drizzt.util.ShUtil;
+import cn.drizzt.util.VoiceUtil;
 
 @Component
 public class DialDispatcher implements Runnable {
@@ -24,15 +30,18 @@ public class DialDispatcher implements Runnable {
 	private ThreadPoolExecutor dialExecutor;
 
 	@Autowired
-	private PublicResource publicResource;
+	private AuthResource authResource;
+
+	@Autowired
+	private SignalAuthService signalAuthService;
 
 	public void run() {
 		while (true) {
-			Map<Integer, ChManager> chManagerPool = publicResource.getChManagerPool();
+			Map<Integer, ChManager> chManagerPool = authResource.getChManagerPool();
 			Set<Integer> keySet = chManagerPool.keySet();
 			for (Integer key : keySet) {
 				ChManager chManager = chManagerPool.get(key);
-				LOGGER.info("判断通道：" + key + "，使用状态：" + chManager.isUseStatus() + "，呼叫状态：" + chManager.isCallStatus());
+				LOGGER.debug("判断通道：" + key + "，使用状态：" + chManager.isUseStatus() + "，呼叫状态：" + chManager.isCallStatus());
 				if (chManager.isUseStatus() && !chManager.isCallStatus()) {
 					chManager.setCallStatus(true);
 					Worker worker = new Worker(chManager);
@@ -64,28 +73,123 @@ public class DialDispatcher implements Runnable {
 		}
 
 		/**
-		 * 处理消息队列
+		 * 监听特定线路的呼叫状态
 		 * 
 		 * @throws InterruptedException
 		 */
 		private void handAuthQueue() {
+
 			int ch = chManager.getCh();
 			int i = 0;
 			boolean b = true; // 循环控制器
+
 			while (b && i < Const.DIAL_TIMEOUT) {
+				// 每隔8毫秒监测一次通道状态
 				i += 8;
 				try {
 					Thread.sleep(8);
 				} catch (InterruptedException e) {
 					LOGGER.error(ExceptionConstans.getTrace(e));
 				}
+
+				// 初始化
+				int autoDial = chManager.getAutoDial();
+				int recordStatus = chManager.getRecordStatus();
+
+				// 监听通道数据
 				int ssmChkAutoDial = ShUtil.INSTANCE.SsmChkAutoDial(ch);
 				int detectBargeIn = ShUtil.INSTANCE.SsmDetectBargeIn(ch);
-				LOGGER.info("ID：" + chManager.getId() + ",通道号：" + ch + ",通道状态为：" + ssmChkAutoDial + ",bargeIn状态"
-						+ detectBargeIn);
+				int toneAnalyzeResult = ShUtil.INSTANCE.SsmGetToneAnalyzeResult(ch);
+				int ssmChkRecToFile = ShUtil.INSTANCE.SsmChkRecToFile(ch);
+				LOGGER.info("ID：" + chManager.getId() + ",通道号：" + ch + ",autoDial状态：" + ssmChkAutoDial + ",tone状态："
+						+ toneAnalyzeResult + ",bargeIn状态：" + detectBargeIn + ",录音状态：" + ssmChkRecToFile);
+
+				// 录音状态判断，如果录音完毕则挂断
+				if (recordStatus == 0 && ssmChkRecToFile == 1) {
+					chManager.setRecordStatus(1);
+				}
+				if (recordStatus == 1 && ssmChkRecToFile == 0) {
+					chManager.setRecordStatus(2);
+					ShUtil.INSTANCE.SsmHangup(ch);
+					b = false;
+				}
+
+				// autoDial判断逻辑
+				if (ssmChkAutoDial == 2 || ssmChkAutoDial == 11) {
+					if (autoDial == 0) {
+						chManager.setAutoDial(ssmChkAutoDial);
+					}
+					if (recordStatus == 0 && detectBargeIn == 1) {
+						chManager.setStartRecordDur(System.currentTimeMillis() - chManager.getStartTime());
+						ShUtil.INSTANCE.SsmRecToFile(ch,
+								Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav", -2, 0, 65535,
+								Const.RECORD_TIME, 1);
+					}
+				}
+				if (ssmChkAutoDial == 7) {
+					if (autoDial != 7) {
+						chManager.setAutoDial(ssmChkAutoDial);
+					}
+					ShUtil.INSTANCE.SsmHangup(ch);
+					b = false;
+					chManager.setCallResult(Const.CALL_RESULT_2);
+				}
+
 			}
-			ShUtil.INSTANCE.SsmHangup(ch);
-			publicResource.resetChManager(ch);
+
+			if (b) { // 呼叫超时
+				chManager.setCallResult(Const.CALL_RESULT_98);
+			}
+
+			// 如果结果未变化，进行语音识别
+			if (chManager.getCallResult() == 99) {
+				if (chManager.getRecordStatus() == 2) {
+					try {
+						Long start = System.currentTimeMillis();
+						String translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
+
+						// 如果token过期则重新获取
+						if (translation.equals("error3302")) {
+							VoiceUtil.getToken();
+							translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
+						}
+
+						chManager.setTranslation(translation);
+						Long end = System.currentTimeMillis();
+						chManager.setVoiceDuration(end - start);
+
+						Map<String, Integer> transTable = authResource.getTransTable();
+						for (Entry<String, Integer> entry : transTable.entrySet()) {
+							if (translation.contains(entry.getKey())) {
+								chManager.setCallResult(entry.getValue());
+								break;
+							}
+						}
+						if (chManager.getCallResult() == 99) {
+							chManager.setCallResult(Const.CALL_RESULT_1);
+						}
+					} catch (Exception e) {
+						LOGGER.error(ExceptionConstans.getTrace(e));
+					}
+				} else {
+					chManager.setCallResult(Const.CALL_RESULT_97);
+				}
+			}
+
+			// 设置持续时间
+			chManager.setDuration(System.currentTimeMillis() - chManager.getStartTime());
+
+			// 属性拷贝并保存数据库
+			SignalAuth signalAuth = new SignalAuth();
+			try {
+				BeanUtils.copyProperties(signalAuth, chManager);
+			} catch (Exception e) {
+				LOGGER.error(ExceptionConstans.getTrace(e));
+			}
+			signalAuthService.update(signalAuth);
+
+			// 重置线路
+			authResource.resetChManager(ch);
 		}
 	}
 }

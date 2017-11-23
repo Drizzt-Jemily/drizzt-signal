@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.drizzt.mapper.SignalMobileMapper" >
+  <resultMap id="BaseResultMap" type="cn.drizzt.entity.SignalMobile" >
+    <id column="mobile_number" property="mobileNumber" jdbcType="VARCHAR" />
+    <result column="mobile_area" property="mobileArea" jdbcType="VARCHAR" />
+    <result column="mobile_type" property="mobileType" jdbcType="VARCHAR" />
+    <result column="area_code" property="areaCode" jdbcType="VARCHAR" />
+    <result column="post_code" property="postCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    mobile_number, mobile_area, mobile_type, area_code, post_code
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.drizzt.entity.SignalMobileExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from signal_mobile
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from signal_mobile
+    where mobile_number = #{mobileNumber,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from signal_mobile
+    where mobile_number = #{mobileNumber,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="cn.drizzt.entity.SignalMobileExample" >
+    delete from signal_mobile
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="cn.drizzt.entity.SignalMobile" >
+    insert into signal_mobile (mobile_number, mobile_area, mobile_type, 
+      area_code, post_code)
+    values (#{mobileNumber,jdbcType=VARCHAR}, #{mobileArea,jdbcType=VARCHAR}, #{mobileType,jdbcType=VARCHAR}, 
+      #{areaCode,jdbcType=VARCHAR}, #{postCode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.drizzt.entity.SignalMobile" >
+    insert into signal_mobile
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="mobileNumber != null" >
+        mobile_number,
+      </if>
+      <if test="mobileArea != null" >
+        mobile_area,
+      </if>
+      <if test="mobileType != null" >
+        mobile_type,
+      </if>
+      <if test="areaCode != null" >
+        area_code,
+      </if>
+      <if test="postCode != null" >
+        post_code,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="mobileNumber != null" >
+        #{mobileNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileArea != null" >
+        #{mobileArea,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileType != null" >
+        #{mobileType,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        #{postCode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="cn.drizzt.entity.SignalMobileExample" resultType="java.lang.Integer" >
+    select count(*) from signal_mobile
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update signal_mobile
+    <set >
+      <if test="record.mobileNumber != null" >
+        mobile_number = #{record.mobileNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileArea != null" >
+        mobile_area = #{record.mobileArea,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileType != null" >
+        mobile_type = #{record.mobileType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.areaCode != null" >
+        area_code = #{record.areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postCode != null" >
+        post_code = #{record.postCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update signal_mobile
+    set mobile_number = #{record.mobileNumber,jdbcType=VARCHAR},
+      mobile_area = #{record.mobileArea,jdbcType=VARCHAR},
+      mobile_type = #{record.mobileType,jdbcType=VARCHAR},
+      area_code = #{record.areaCode,jdbcType=VARCHAR},
+      post_code = #{record.postCode,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.drizzt.entity.SignalMobile" >
+    update signal_mobile
+    <set >
+      <if test="mobileArea != null" >
+        mobile_area = #{mobileArea,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileType != null" >
+        mobile_type = #{mobileType,jdbcType=VARCHAR},
+      </if>
+      <if test="areaCode != null" >
+        area_code = #{areaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="postCode != null" >
+        post_code = #{postCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where mobile_number = #{mobileNumber,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.drizzt.entity.SignalMobile" >
+    update signal_mobile
+    set mobile_area = #{mobileArea,jdbcType=VARCHAR},
+      mobile_type = #{mobileType,jdbcType=VARCHAR},
+      area_code = #{areaCode,jdbcType=VARCHAR},
+      post_code = #{postCode,jdbcType=VARCHAR}
+    where mobile_number = #{mobileNumber,jdbcType=VARCHAR}
+  </update>
+  <select id="selectPage" resultMap="BaseResultMap" parameterType="cn.drizzt.entity.SignalMobileExample" >
+    select 
+<if test="distinct" > 
+distinct 
+</if> 
+<include refid="Base_Column_List" /> 
+from signal_mobile
+<if test="_parameter != null" > 
+<include refid="Example_Where_Clause" /> 
+</if> 
+<if test="orderByClause != null" > 
+order by ${orderByClause} 
+</if> 
+limit #{pageIndex},#{pageSize} 
+
+  </select>
+</mapper>

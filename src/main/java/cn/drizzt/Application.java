@@ -11,7 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-import cn.drizzt.thread.PublicResource;
+import cn.drizzt.thread.AuthResource;
 
 @Controller
 @EnableWebMvc
@@ -20,7 +20,7 @@ import cn.drizzt.thread.PublicResource;
 public class Application extends WebMvcConfigurerAdapter implements CommandLineRunner {
 
 	@Autowired
-	private PublicResource publicResource;
+	private AuthResource authResource;
 
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Application.class, args);
@@ -28,7 +28,7 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
 
 	@Override
 	public void run(String... args) throws Exception {
-		publicResource.init();
+		authResource.init();
 	}
 
 	@RequestMapping("/")

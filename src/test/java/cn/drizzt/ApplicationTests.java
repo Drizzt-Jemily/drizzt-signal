@@ -37,7 +37,7 @@ public class ApplicationTests {
 		signalAuth.setId(Numbers.uuid());
 		signalAuth.setCalling("18611967787");
 		signalAuth.setStartTime(System.currentTimeMillis());
-		signalAuth.setCallStatus(Const.CALL_STATUS_0);
+		signalAuth.setCallResult(Const.CALL_RESULT_0);
 		signalAuthService.add(signalAuth);
 		SignalAuth waitAuth = signalAuthService.getWaitAuth();
 		System.out.println(waitAuth.getId());
