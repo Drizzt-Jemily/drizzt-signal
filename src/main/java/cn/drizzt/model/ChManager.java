@@ -36,6 +36,16 @@ public class ChManager {
 
 	private Long duration; // 验证持续时间
 
+	private boolean hangup = false;
+
+	public boolean isHangup() {
+		return hangup;
+	}
+
+	public void setHangup(boolean hangup) {
+		this.hangup = hangup;
+	}
+
 	public Long getVoiceDuration() {
 		return voiceDuration;
 	}

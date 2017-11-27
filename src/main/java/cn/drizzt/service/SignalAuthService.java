@@ -33,13 +33,21 @@ public class SignalAuthService {
 			return null;
 		}
 	}
-	
-	public void update(SignalAuth signalAuth){
+
+	public void update(SignalAuth signalAuth) {
 		signalAuthMapper.updateByPrimaryKeySelective(signalAuth);
 	}
-	
-	public SignalAuth getById(String id){
+
+	public SignalAuth getById(String id) {
 		return signalAuthMapper.selectByPrimaryKey(id);
+	}
+
+	public List<SignalAuth> getByBatchId(String batchId) {
+		SignalAuthExample example = new SignalAuthExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andBatchIdEqualTo(batchId);
+		example.setOrderByClause("call_result desc");
+		return signalAuthMapper.selectByExample(example);
 	}
 
 }

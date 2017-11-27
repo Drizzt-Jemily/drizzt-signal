@@ -6,6 +6,8 @@ public class SignalAuth extends BaseEntity {
 	@Id
 	private String id;
 
+	private String batchId;
+
 	private Integer ch;
 
 	private String called;
@@ -36,6 +38,14 @@ public class SignalAuth extends BaseEntity {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getBatchId() {
+		return batchId;
+	}
+
+	public void setBatchId(String batchId) {
+		this.batchId = batchId;
 	}
 
 	public Integer getCh() {

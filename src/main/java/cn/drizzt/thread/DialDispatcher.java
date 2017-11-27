@@ -112,6 +112,7 @@ public class DialDispatcher implements Runnable {
 				if (recordStatus == 1 && ssmChkRecToFile == 0) {
 					chManager.setRecordStatus(2);
 					ShUtil.INSTANCE.SsmHangup(ch);
+					chManager.setHangup(true);
 					b = false;
 				}
 
@@ -143,6 +144,11 @@ public class DialDispatcher implements Runnable {
 					chManager.setCallResult(Const.CALL_RESULT_2);
 				}
 
+			}
+
+			// 如果在呼叫过程中未挂机，执行挂机操作
+			if (!chManager.isHangup()) {
+				ShUtil.INSTANCE.SsmHangup(ch);
 			}
 
 			if (b) { // 呼叫超时
@@ -199,6 +205,13 @@ public class DialDispatcher implements Runnable {
 			// 属性拷贝并保存数据库
 			SignalAuth signalAuth = new SignalAuth();
 			try {
+
+				// 去掉外地号码加拨的0
+				String calling = chManager.getCalling();
+				if (calling.startsWith("0")) {
+					chManager.setCalling(calling.substring(1, calling.length()));
+				}
+
 				BeanUtils.copyProperties(signalAuth, chManager);
 			} catch (Exception e) {
 				LOGGER.error(ExceptionConstans.getTrace(e));

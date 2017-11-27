@@ -13,15 +13,21 @@
 	<br>
 	<br>
 	<center>
-		<#if id =='-99'>
+		<#if batchId =='-99'>
 			未授权
-		<#elseif id =='-98'>
-			号码格式不正确
+		<#elseif batchId =='-98'>
+			文件格式不正确
 		<#else>
-			<a href="${base}/auth/oneResult/${id}">查询结果</a>
+			您有以下行数的数据格式不正确： <br>
+			<#list is as i>
+				${i},
+			</#list>
+			<br>
+			<br>
+			<a href="${base}/auth/batchResult/${batchId}">查询结果</a>
 		</#if>
 		<br>
-		<a href="${base}/" target="_self">返回</a>
+		<a href="${base}/batch" target="_self">返回</a>
 	</center>
 </body>
 </html>

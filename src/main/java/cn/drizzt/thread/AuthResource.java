@@ -45,11 +45,11 @@ public class AuthResource {
 			}
 
 			transTable = new HashMap<String, Integer>();
+			transTable.put("不要", Const.CALL_RESULT_3);
 			transTable.put("通话", Const.CALL_RESULT_3);
 			transTable.put("忙", Const.CALL_RESULT_3);
 			transTable.put("接通", Const.CALL_RESULT_3);
 			transTable.put("不方便", Const.CALL_RESULT_3);
-			transTable.put("不要", Const.CALL_RESULT_3);
 			transTable.put("限制", Const.CALL_RESULT_4);
 			transTable.put("设置", Const.CALL_RESULT_4);
 			transTable.put("关机", Const.CALL_RESULT_5);
@@ -72,7 +72,7 @@ public class AuthResource {
 			LOGGER.info("板卡启动失败:" + ShUtil.INSTANCE.SsmGetLastErrMsgA());
 		}
 	}
-	
+
 	public Map<String, Integer> getTransTable() {
 		return transTable;
 	}
@@ -92,6 +92,9 @@ public class AuthResource {
 				return entry.getValue();
 			} else { // 释放过期通道
 				if (System.currentTimeMillis() - entry.getValue().getStartTime() > Const.CHMANAGER_TIMEOUT) {
+					if (!entry.getValue().isHangup()) {
+						ShUtil.INSTANCE.SsmHangup(entry.getValue().getCh());
+					}
 					resetChManager(entry.getKey());
 					return entry.getValue();
 				}
