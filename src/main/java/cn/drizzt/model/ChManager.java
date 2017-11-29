@@ -24,7 +24,7 @@ public class ChManager {
 
 	private int toneAnalyze = 0; // 通道的SsmGetToneAnalyzeResult状态
 
-	private int recordStatus = 0; // 0:无录音；1：录音进行中；2：录音完成；
+	private int recordStatus = 0; // 0:无录音；1：启动录音；2：录音进行中；3：录音完成；
 
 	private long startRecordDur; // 间隔多久开始录音
 

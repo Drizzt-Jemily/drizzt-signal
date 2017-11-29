@@ -78,148 +78,185 @@ public class DialDispatcher implements Runnable {
 		 * @throws InterruptedException
 		 */
 		private void handAuthQueue() {
+			try {
+				int ch = chManager.getCh();
+				int i = 0;
+				boolean b = true; // 循环控制器
 
-			int ch = chManager.getCh();
-			int i = 0;
-			boolean b = true; // 循环控制器
-
-			while (b && i < Const.DIAL_TIMEOUT) {
-				// 每隔8毫秒监测一次通道状态
-				i += 8;
-				try {
-					Thread.sleep(8);
-				} catch (InterruptedException e) {
-					LOGGER.error(ExceptionConstans.getTrace(e));
-				}
-
-				// 初始化
-				int autoDial = chManager.getAutoDial();
-				int toneAnalyze = chManager.getToneAnalyze();
-				int recordStatus = chManager.getRecordStatus();
-
-				// 监听通道数据
-				int ssmChkAutoDial = ShUtil.INSTANCE.SsmChkAutoDial(ch);
-				int ssmDetectBargeIn = ShUtil.INSTANCE.SsmDetectBargeIn(ch);
-				int ssmGetToneAnalyzeResult = ShUtil.INSTANCE.SsmGetToneAnalyzeResult(ch);
-				int ssmChkRecToFile = ShUtil.INSTANCE.SsmChkRecToFile(ch);
-				LOGGER.debug("ID：" + chManager.getId() + ",通道号：" + ch + ",autoDial状态：" + ssmChkAutoDial + ",tone状态："
-						+ ssmGetToneAnalyzeResult + ",bargeIn状态：" + ssmDetectBargeIn + ",录音状态：" + ssmChkRecToFile);
-
-				// 录音状态判断，如果录音完毕则挂断
-				if (recordStatus == 0 && ssmChkRecToFile == 1) {
-					chManager.setRecordStatus(1);
-				}
-				if (recordStatus == 1 && ssmChkRecToFile == 0) {
-					chManager.setRecordStatus(2);
-					ShUtil.INSTANCE.SsmHangup(ch);
-					chManager.setHangup(true);
-					b = false;
-				}
-
-				// toneAnalyze判断逻辑
-				if (ssmGetToneAnalyzeResult == 3 || ssmGetToneAnalyzeResult == 6) {
-					if (toneAnalyze == 0) {
-						chManager.setToneAnalyze(ssmGetToneAnalyzeResult);
-					}
-				}
-
-				// autoDial判断逻辑
-				if (ssmChkAutoDial == 2 || ssmChkAutoDial == 11) {
-					if (autoDial == 0) {
-						chManager.setAutoDial(ssmChkAutoDial);
-					}
-					if (recordStatus == 0 && ssmDetectBargeIn == 1) {
-						chManager.setStartRecordDur(System.currentTimeMillis() - chManager.getStartTime());
-						ShUtil.INSTANCE.SsmRecToFile(ch,
-								Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav", -2, 0, 65535,
-								Const.RECORD_TIME, 1);
-					}
-				}
-				if (ssmChkAutoDial == 7) {
-					if (autoDial != 7) {
-						chManager.setAutoDial(ssmChkAutoDial);
-					}
-					ShUtil.INSTANCE.SsmHangup(ch);
-					b = false;
-					chManager.setCallResult(Const.CALL_RESULT_2);
-				}
-
-			}
-
-			// 如果在呼叫过程中未挂机，执行挂机操作
-			if (!chManager.isHangup()) {
-				ShUtil.INSTANCE.SsmHangup(ch);
-			}
-
-			if (b) { // 呼叫超时
-				chManager.setCallResult(Const.CALL_RESULT_98);
-			}
-
-			// 如果结果未变化，进行语音识别
-			if (chManager.getCallResult() == 99) {
-				if (chManager.getRecordStatus() == 2) {
+				while (b && i < Const.DIAL_TIMEOUT) {
+					// 每隔8毫秒监测一次通道状态
+					i += 8;
 					try {
-						Long start = System.currentTimeMillis();
-						String translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
-
-						// 如果token过期则重新获取
-						if (translation.equals("error3302")) {
-							VoiceUtil.getToken();
-							translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
-						}
-
-						chManager.setTranslation(translation);
-						Long end = System.currentTimeMillis();
-						chManager.setVoiceDuration(end - start);
-
-						Map<String, Integer> transTable = authResource.getTransTable();
-						for (Entry<String, Integer> entry : transTable.entrySet()) {
-							if (translation.contains(entry.getKey())) {
-								chManager.setCallResult(entry.getValue());
-								break;
-							}
-						}
-						if (chManager.getCallResult() == 99) {
-							chManager.setCallResult(Const.CALL_RESULT_1);
-						}
-					} catch (Exception e) {
+						Thread.sleep(8);
+					} catch (InterruptedException e) {
 						LOGGER.error(ExceptionConstans.getTrace(e));
 					}
-				} else {
-					chManager.setCallResult(Const.CALL_RESULT_97);
+
+					// 初始化
+					int autoDial = chManager.getAutoDial();
+					int toneAnalyze = chManager.getToneAnalyze();
+					int recordStatus = chManager.getRecordStatus();
+
+					// 监听通道数据
+					int ssmChkAutoDial = ShUtil.INSTANCE.SsmChkAutoDial(ch);
+					int ssmDetectBargeIn = ShUtil.INSTANCE.SsmDetectBargeIn(ch);
+					int ssmGetToneAnalyzeResult = ShUtil.INSTANCE.SsmGetToneAnalyzeResult(ch);
+					int ssmChkRecToFile = ShUtil.INSTANCE.SsmChkRecToFile(ch);
+					LOGGER.debug("ID：" + chManager.getId() + ",通道号：" + ch + ",autoDial状态：" + ssmChkAutoDial + ",tone状态："
+							+ ssmGetToneAnalyzeResult + ",bargeIn状态：" + ssmDetectBargeIn + ",录音状态：" + ssmChkRecToFile);
+
+					// 录音状态判断，如果录音完毕则挂断
+					if (recordStatus == 1 && ssmChkRecToFile == 1) {
+						chManager.setRecordStatus(2);
+					}
+					if (recordStatus == 2 && ssmChkRecToFile == 0) {
+						chManager.setRecordStatus(3);
+						ShUtil.INSTANCE.SsmHangup(ch);
+						chManager.setHangup(true);
+						b = false;
+					}
+
+					// toneAnalyze判断逻辑
+					if (ssmGetToneAnalyzeResult == 3) {
+						if (toneAnalyze == 0) {
+							chManager.setToneAnalyze(ssmGetToneAnalyzeResult);
+						}
+						ShUtil.INSTANCE.SsmHangup(ch);
+						b = false;
+						chManager.setCallResult(Const.CALL_RESULT_1);
+					} else if (ssmGetToneAnalyzeResult == 6) {
+						if (toneAnalyze == 0) {
+							chManager.setToneAnalyze(ssmGetToneAnalyzeResult);
+						}
+					}
+
+					// autoDial判断逻辑
+					if (ssmChkAutoDial == 2) {
+						if (autoDial == 0) {
+							chManager.setAutoDial(ssmChkAutoDial);
+						}
+						if (recordStatus == 0 && ssmDetectBargeIn == 1) {
+							chManager.setStartRecordDur(System.currentTimeMillis() - chManager.getStartTime());
+							ShUtil.INSTANCE.SsmRecToFile(ch,
+									Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav", -2, 0, 65535,
+									Const.RECORD_TIME, 1);
+							chManager.setRecordStatus(1);
+						}
+					} else if (ssmChkAutoDial == 7) {
+						if (autoDial != 7) {
+							chManager.setAutoDial(ssmChkAutoDial);
+						}
+						ShUtil.INSTANCE.SsmHangup(ch);
+						b = false;
+						chManager.setCallResult(Const.CALL_RESULT_2);
+					} else if (ssmChkAutoDial == 11) {
+						if (autoDial != 11) {
+							chManager.setAutoDial(ssmChkAutoDial);
+						}
+						ShUtil.INSTANCE.SsmHangup(ch);
+						b = false;
+						chManager.setCallResult(Const.CALL_RESULT_97);
+					}
+
 				}
-			}
 
-			// 设置持续时间
-			chManager.setDuration(System.currentTimeMillis() - chManager.getStartTime());
-
-			// 删除录音文件
-			File pcmFile = new File(Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav");
-			if (pcmFile.exists()) {
-				boolean d = pcmFile.delete();
-				if (!d) {
-					LOGGER.error("文件删除失败：" + chManager.getId() + ".wav");
-				}
-			}
-
-			// 属性拷贝并保存数据库
-			SignalAuth signalAuth = new SignalAuth();
-			try {
-
-				// 去掉外地号码加拨的0
-				String calling = chManager.getCalling();
-				if (calling.startsWith("0")) {
-					chManager.setCalling(calling.substring(1, calling.length()));
+				// 如果在呼叫过程中未挂机，执行挂机操作
+				if (!chManager.isHangup()) {
+					ShUtil.INSTANCE.SsmHangup(ch);
 				}
 
-				BeanUtils.copyProperties(signalAuth, chManager);
+				if (b) { // 呼叫超时
+					chManager.setCallResult(Const.CALL_RESULT_98);
+				}
+
+				// 如果结果未变化，进行语音识别
+				if (chManager.getCallResult() == 99) {
+					if (chManager.getRecordStatus() == 3) {
+						try {
+							Long start = System.currentTimeMillis();
+							String translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
+
+							// 如果token过期则重新获取
+							if (translation.equals("error3302")) {
+								VoiceUtil.getToken();
+								translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
+							}
+
+							chManager.setTranslation(translation);
+							Long end = System.currentTimeMillis();
+							chManager.setVoiceDuration(end - start);
+
+							Map<String, Integer> transTable = authResource.getTransTable();
+							for (Entry<String, Integer> entry : transTable.entrySet()) {
+								if (translation.contains(entry.getKey())) {
+									chManager.setCallResult(entry.getValue());
+									break;
+								}
+							}
+							if (chManager.getCallResult() == 99) {
+								chManager.setCallResult(Const.CALL_RESULT_1);
+							}
+						} catch (Exception e) {
+							LOGGER.error(ExceptionConstans.getTrace(e));
+						}
+					} else {
+						chManager.setCallResult(Const.CALL_RESULT_97);
+					}
+				}
+
+				// 设置持续时间
+				chManager.setDuration(System.currentTimeMillis() - chManager.getStartTime());
+
+				// 删除录音文件
+				File pcmFile = new File(Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav");
+				if (pcmFile.exists()) {
+					boolean d = pcmFile.delete();
+					if (!d) {
+						LOGGER.error("文件删除失败：" + chManager.getId() + ".wav");
+					}
+				}
+
+				// 属性拷贝并保存数据库
+				SignalAuth signalAuth = new SignalAuth();
+				try {
+
+					// 去掉外地号码加拨的0
+					String calling = chManager.getCalling();
+					if (calling.startsWith("0")) {
+						chManager.setCalling(calling.substring(1, calling.length()));
+					}
+
+					BeanUtils.copyProperties(signalAuth, chManager);
+				} catch (Exception e) {
+					LOGGER.error(ExceptionConstans.getTrace(e));
+				}
+				signalAuthService.update(signalAuth);
+
+				// 重置线路
+				authResource.resetChManager(ch);
+				
 			} catch (Exception e) {
-				LOGGER.error(ExceptionConstans.getTrace(e));
-			}
-			signalAuthService.update(signalAuth);
+				LOGGER.error("ID号码为：" + chManager.getId() + ",本次呼叫出现异常！！！");
+				// 属性拷贝并保存数据库
+				SignalAuth signalAuth = new SignalAuth();
+				try {
 
-			// 重置线路
-			authResource.resetChManager(ch);
+					// 去掉外地号码加拨的0
+					String calling = chManager.getCalling();
+					if (calling.startsWith("0")) {
+						chManager.setCalling(calling.substring(1, calling.length()));
+					}
+
+					BeanUtils.copyProperties(signalAuth, chManager);
+				} catch (Exception e1) {
+					LOGGER.error(ExceptionConstans.getTrace(e1));
+				}
+				signalAuth.setCallResult(Const.CALL_RESULT_97);
+				signalAuthService.update(signalAuth);
+
+				// 重置线路
+				authResource.resetChManager(chManager.getCh());
+			}
 		}
 	}
 }

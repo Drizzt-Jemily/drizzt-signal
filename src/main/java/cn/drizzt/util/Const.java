@@ -2,7 +2,7 @@ package cn.drizzt.util;
 
 public class Const {
 
-	public static final String CTI_SO_PATH = "/usr/local/lib/shcti/ver5.3.40/out/libshpa3.so.5.3.40";
+	public static final String CTI_SO_PATH = "/usr/local/lib/shcti/ver5.4.20/out/libshpa3.so.5.4.20";
 	public static final String CTI_INI_PATH = "/home/longtel/CtiLinux5.4.20-2.6.32-504.el6.x86_64-SMP-x86_64/tools/";
 	public static final String CTI_VOICE_PATH = "/home/drizzt/signal/voice";
 	// public static final String CTI_VOICE_PATH = "C:/workspace";
@@ -20,8 +20,8 @@ public class Const {
 	public static final int CARD_SLEEPTIME = 15000; // 板卡启动时间
 	public static final int CARD_NUMBER = 30; // 话路数量
 	public static final int CHMANAGER_TIMEOUT = 20000; // 线路超时时间
-	public static final int DIAL_TIMEOUT = 10000; // 呼叫超时时间
-	public static final int RECORD_TIME = 4000; // 录音时间
+	public static final int DIAL_TIMEOUT = 12000; // 呼叫超时时间
+	public static final int RECORD_TIME = 5000; // 录音时间
 	public static final int DISPATCHER_SLEEPTIME = 200; // 调度器睡眠时间
 	public static final int POOL_KEEPALIVE_SECOND = 5; // 线程存活时间
 
@@ -29,7 +29,7 @@ public class Const {
 	public static final int CALL_RESULT_0 = 0; // 未呼叫
 	public static final int CALL_RESULT_99 = 99; // 正在呼叫
 	public static final int CALL_RESULT_98 = 98; // 呼叫超时
-	public static final int CALL_RESULT_97 = 97; // 呼叫异常
+	public static final int CALL_RESULT_97 = 97; // 呼叫失败
 	public static final int CALL_RESULT_1 = 1; // 正常号码
 	public static final int CALL_RESULT_2 = 2; // 被接听
 	public static final int CALL_RESULT_3 = 3; // 暂时无法接听

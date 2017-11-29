@@ -36,7 +36,7 @@ public class AuthResource {
 			Thread.sleep(Const.CARD_SLEEPTIME);
 			LOGGER.info("板卡启动成功");
 			chManagerPool = new ConcurrentHashMap<Integer, ChManager>();
-			for (int j = 0; j < Const.CARD_NUMBER; j++) {
+			for (int j = 120; j < Const.CARD_NUMBER+120; j++) {
 				int state = ShUtil.INSTANCE.SsmGetChState(j);
 				LOGGER.info(j + "通道状态：" + state);
 				if (state == 0) {

@@ -80,7 +80,7 @@ public class AuthController {
 		} else if (callResult == Const.CALL_RESULT_98) {
 			cr = "呼叫超时";
 		} else if (callResult == Const.CALL_RESULT_97) {
-			cr = "呼叫异常";
+			cr = "呼叫失败";
 		} else if (callResult == Const.CALL_RESULT_1) {
 			cr = "正常号码";
 		} else if (callResult == Const.CALL_RESULT_2) {
@@ -167,7 +167,7 @@ public class AuthController {
 			} else if (signalAuth.getCallResult() == Const.CALL_RESULT_98) {
 				batchResponse.setCallResult("呼叫超时");
 			} else if (signalAuth.getCallResult() == Const.CALL_RESULT_97) {
-				batchResponse.setCallResult("呼叫异常");
+				batchResponse.setCallResult("呼叫失败");
 			} else if (signalAuth.getCallResult() == Const.CALL_RESULT_1) {
 				batchResponse.setCallResult("正常号码");
 			} else if (signalAuth.getCallResult() == Const.CALL_RESULT_2) {
