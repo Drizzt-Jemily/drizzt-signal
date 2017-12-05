@@ -1,5 +1,7 @@
 package cn.drizzt.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,18 @@ public class SignalUserService {
 
 	public void reduceNumber(String id) {
 		signalUserMapper.reduceNumber(id);
+	}
+	
+	public List<SignalUser> getAll(){
+		return signalUserMapper.selectAll();
+	}
+	
+	public void add(SignalUser signalUser){
+		signalUserMapper.insertSelective(signalUser);
+	}
+	
+	public void edit(SignalUser signalUser){
+		signalUserMapper.updateByPrimaryKeySelective(signalUser);
 	}
 
 }
