@@ -77,6 +77,7 @@ public class DialDispatcher implements Runnable {
 		 * 
 		 * @throws InterruptedException
 		 */
+		@SuppressWarnings("unused")
 		private void handAuthQueue() {
 			try {
 				int ch = chManager.getCh();
@@ -86,11 +87,7 @@ public class DialDispatcher implements Runnable {
 				while (b && i < Const.DIAL_TIMEOUT) {
 					// 每隔8毫秒监测一次通道状态
 					i += 8;
-					try {
-						Thread.sleep(8);
-					} catch (InterruptedException e) {
-						LOGGER.error(ExceptionConstans.getTrace(e));
-					}
+					Thread.sleep(8);
 
 					// 初始化
 					int autoDial = chManager.getAutoDial();
@@ -141,6 +138,8 @@ public class DialDispatcher implements Runnable {
 									Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav", -2, 0, 65535,
 									Const.RECORD_TIME, 1);
 							chManager.setRecordStatus(1);
+							// 开始录音时增加录音时长
+							i = i - Const.RECORD_TIME;
 						}
 					} else if (ssmChkAutoDial == 7) {
 						if (autoDial != 7) {
@@ -172,32 +171,28 @@ public class DialDispatcher implements Runnable {
 				// 如果结果未变化，进行语音识别
 				if (chManager.getCallResult() == 99) {
 					if (chManager.getRecordStatus() == 3) {
-						try {
-							Long start = System.currentTimeMillis();
-							String translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
+						Long start = System.currentTimeMillis();
+						String translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
 
-							// 如果token过期则重新获取
-							if (translation.equals("error3302")) {
-								VoiceUtil.getToken();
-								translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
-							}
+						// 如果token过期则重新获取
+						if (translation.equals("error3302")) {
+							VoiceUtil.getToken();
+							translation = VoiceUtil.getTranslation(chManager.getId() + ".wav");
+						}
 
-							chManager.setTranslation(translation);
-							Long end = System.currentTimeMillis();
-							chManager.setVoiceDuration(end - start);
+						chManager.setTranslation(translation);
+						Long end = System.currentTimeMillis();
+						chManager.setVoiceDuration(end - start);
 
-							Map<String, Integer> transTable = authResource.getTransTable();
-							for (Entry<String, Integer> entry : transTable.entrySet()) {
-								if (translation.contains(entry.getKey())) {
-									chManager.setCallResult(entry.getValue());
-									break;
-								}
+						Map<String, Integer> transTable = authResource.getTransTable();
+						for (Entry<String, Integer> entry : transTable.entrySet()) {
+							if (translation.contains(entry.getKey())) {
+								chManager.setCallResult(entry.getValue());
+								break;
 							}
-							if (chManager.getCallResult() == 99) {
-								chManager.setCallResult(Const.CALL_RESULT_1);
-							}
-						} catch (Exception e) {
-							LOGGER.error(ExceptionConstans.getTrace(e));
+						}
+						if (chManager.getCallResult() == 99) {
+							chManager.setCallResult(Const.CALL_RESULT_1);
 						}
 					} else {
 						chManager.setCallResult(Const.CALL_RESULT_97);
@@ -209,7 +204,7 @@ public class DialDispatcher implements Runnable {
 
 				// 删除录音文件
 				File pcmFile = new File(Const.CTI_VOICE_PATH + File.separator + chManager.getId() + ".wav");
-				if (pcmFile.exists()) {
+				if (pcmFile.exists() && !Const.DEBUG) {
 					boolean d = pcmFile.delete();
 					if (!d) {
 						LOGGER.error("文件删除失败：" + chManager.getId() + ".wav");
@@ -218,25 +213,30 @@ public class DialDispatcher implements Runnable {
 
 				// 属性拷贝并保存数据库
 				SignalAuth signalAuth = new SignalAuth();
-				try {
 
-					// 去掉外地号码加拨的0
-					String calling = chManager.getCalling();
-					if (calling.startsWith("0")) {
-						chManager.setCalling(calling.substring(1, calling.length()));
-					}
-
-					BeanUtils.copyProperties(signalAuth, chManager);
-				} catch (Exception e) {
-					LOGGER.error(ExceptionConstans.getTrace(e));
+				// 去掉外地号码加拨的0
+				String calling = chManager.getCalling();
+				if (calling.startsWith("0")) {
+					chManager.setCalling(calling.substring(1, calling.length()));
 				}
+
+				BeanUtils.copyProperties(signalAuth, chManager);
 				signalAuthService.update(signalAuth);
 
+				// 增加300毫秒释放通道时间
+				Thread.sleep(300);
 				// 重置线路
 				authResource.resetChManager(ch);
-				
+
 			} catch (Exception e) {
 				LOGGER.error("ID号码为：" + chManager.getId() + ",本次呼叫出现异常！！！");
+				LOGGER.error(ExceptionConstans.getTrace(e));
+
+				// 关闭线路
+				if (!chManager.isHangup()) {
+					ShUtil.INSTANCE.SsmHangup(chManager.getCallResult());
+				}
+
 				// 属性拷贝并保存数据库
 				SignalAuth signalAuth = new SignalAuth();
 				try {
@@ -253,6 +253,13 @@ public class DialDispatcher implements Runnable {
 				}
 				signalAuth.setCallResult(Const.CALL_RESULT_97);
 				signalAuthService.update(signalAuth);
+
+				// 增加300毫秒释放通道时间
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e1) {
+					LOGGER.error(ExceptionConstans.getTrace(e));
+				}
 
 				// 重置线路
 				authResource.resetChManager(chManager.getCh());

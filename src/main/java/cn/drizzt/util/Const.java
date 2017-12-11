@@ -2,6 +2,8 @@ package cn.drizzt.util;
 
 public class Const {
 
+	public static final boolean DEBUG = true; // 控制文件删除
+
 	public static final String CTI_SO_PATH = "/usr/local/lib/shcti/ver5.4.20/out/libshpa3.so.5.4.20";
 	public static final String CTI_INI_PATH = "/home/longtel/CtiLinux5.4.20-2.6.32-504.el6.x86_64-SMP-x86_64/tools/";
 	public static final String CTI_VOICE_PATH = "/home/drizzt/signal/voice";
@@ -20,8 +22,8 @@ public class Const {
 	public static final int CARD_SLEEPTIME = 15000; // 板卡启动时间
 	public static final int CARD_NUMBER = 30; // 话路数量
 	public static final int CHMANAGER_TIMEOUT = 20000; // 线路超时时间
-	public static final int DIAL_TIMEOUT = 12000; // 呼叫超时时间
-	public static final int RECORD_TIME = 5000; // 录音时间
+	public static final int DIAL_TIMEOUT = 10000; // 呼叫超时时间
+	public static final int RECORD_TIME = 4000; // 录音时间
 	public static final int DISPATCHER_SLEEPTIME = 200; // 调度器睡眠时间
 	public static final int POOL_KEEPALIVE_SECOND = 5; // 线程存活时间
 

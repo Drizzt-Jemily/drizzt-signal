@@ -9,7 +9,7 @@ public class CallResultCH {
 		} else if (callResult == Const.CALL_RESULT_99) {
 			cr = "正在呼叫";
 		} else if (callResult == Const.CALL_RESULT_98) {
-			cr = "呼叫超时";
+			cr = "呼叫无应答";
 		} else if (callResult == Const.CALL_RESULT_97) {
 			cr = "呼叫失败";
 		} else if (callResult == Const.CALL_RESULT_1) {

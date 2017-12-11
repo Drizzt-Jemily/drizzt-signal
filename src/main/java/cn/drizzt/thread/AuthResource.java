@@ -58,6 +58,7 @@ public class AuthResource {
 			transTable.put("不存在", Const.CALL_RESULT_6);
 			transTable.put("欠费", Const.CALL_RESULT_7);
 			transTable.put("停机", Const.CALL_RESULT_7);
+			transTable.put("暂停", Const.CALL_RESULT_7);
 			transTable.put("秘书", Const.CALL_RESULT_8);
 			transTable.put("提醒", Const.CALL_RESULT_8);
 			transTable.put("提示", Const.CALL_RESULT_8);

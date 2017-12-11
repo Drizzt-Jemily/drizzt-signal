@@ -12,9 +12,13 @@ import java.net.URL;
 
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.log4j.Logger;
+
 import net.sf.json.JSONObject;
 
 public class VoiceUtil {
+
+	private static Logger LOGGER = Logger.getLogger(VoiceUtil.class);
 
 	private static final String serverURL = "http://vop.baidu.com/server_api";
 	private static String token = "";
@@ -41,74 +45,90 @@ public class VoiceUtil {
 	public static String getTranslation(String fileName) {
 		File pcmFile = new File(Const.CTI_VOICE_PATH + File.separator + fileName);
 		HttpURLConnection conn;
+		byte[] loadFile;
 		try {
-			conn = (HttpURLConnection) new URL(serverURL).openConnection();
-			// construct params
-			JSONObject params = new JSONObject();
-			params.put("format", "pcm");
-			params.put("rate", 8000);
-			params.put("channel", "1");
-			params.put("token", token);
-			params.put("cuid", cuid);
-			params.put("len", pcmFile.length());
-			params.put("speech", DatatypeConverter.printBase64Binary(loadFile(pcmFile)));
+			loadFile = loadFile(pcmFile);
+		} catch (IOException e1) {
+			LOGGER.error(ExceptionConstans.getTrace(e1));
+			return "";
+		}
+		if (null != loadFile) {
+			try {
+				conn = (HttpURLConnection) new URL(serverURL).openConnection();
+				// construct params
+				JSONObject params = new JSONObject();
+				params.put("format", "pcm");
+				params.put("rate", 8000);
+				params.put("channel", "1");
+				params.put("token", token);
+				params.put("cuid", cuid);
+				params.put("len", pcmFile.length());
+				params.put("speech", DatatypeConverter.printBase64Binary(loadFile));
 
-			// add request header
-			conn.setRequestMethod("POST");
-			conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+				// add request header
+				conn.setRequestMethod("POST");
+				conn.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 
-			conn.setDoInput(true);
-			conn.setDoOutput(true);
+				conn.setDoInput(true);
+				conn.setDoOutput(true);
 
-			// send request
-			DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-			wr.writeBytes(params.toString());
-			wr.flush();
-			wr.close();
+				// send request
+				DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+				wr.writeBytes(params.toString());
+				wr.flush();
+				wr.close();
 
-			InputStream is = conn.getInputStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-			String line;
-			StringBuffer response = new StringBuffer();
-			while ((line = rd.readLine()) != null) {
-				response.append(line);
-				response.append('\r');
+				InputStream is = conn.getInputStream();
+				BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+				String line;
+				StringBuffer response = new StringBuffer();
+				while ((line = rd.readLine()) != null) {
+					response.append(line);
+					response.append('\r');
+				}
+				rd.close();
+				String Translation = "";
+				JSONObject jsonObject = JSONObject.fromObject(response.toString());
+				if (jsonObject.getString("err_no").equals("0")) {
+					Translation = jsonObject.getString("result");
+				} else if (jsonObject.getString("err_no").equals("3302")) {
+					Translation = "error3302";
+				}
+				return Translation;
+			} catch (Exception e) {
+				LOGGER.error(ExceptionConstans.getTrace(e));
+				return "";
 			}
-			rd.close();
-			String Translation = "";
-			JSONObject jsonObject = JSONObject.fromObject(response.toString());
-			if (jsonObject.getString("err_no").equals("0")) {
-				Translation = jsonObject.getString("result");
-			} else if (jsonObject.getString("err_no").equals("3302")) {
-				Translation = "error3302";
-			}
-			return Translation;
-		} catch (Exception e) {
-			e.printStackTrace();
+		} else {
 			return "";
 		}
 
 	}
 
 	private static byte[] loadFile(File file) throws IOException {
-		InputStream is = new FileInputStream(file);
+		if (null != file) {
+			InputStream is = new FileInputStream(file);
 
-		long length = file.length();
-		byte[] bytes = new byte[(int) length];
+			long length = file.length();
+			byte[] bytes = new byte[(int) length];
 
-		int offset = 0;
-		int numRead = 0;
-		while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
-			offset += numRead;
-		}
+			int offset = 0;
+			int numRead = 0;
+			while (offset < bytes.length && (numRead = is.read(bytes, offset, bytes.length - offset)) >= 0) {
+				offset += numRead;
+			}
 
-		if (offset < bytes.length) {
+			if (offset < bytes.length) {
+				is.close();
+				throw new IOException("Could not completely read file " + file.getName());
+			}
+
 			is.close();
-			throw new IOException("Could not completely read file " + file.getName());
+			return bytes;
+		} else {
+			return null;
 		}
 
-		is.close();
-		return bytes;
 	}
 
 	public static void main(String[] args) throws Exception {
