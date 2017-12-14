@@ -6,33 +6,43 @@ import javax.persistence.Id;
 
 public class SignalUser extends BaseEntity {
 	@Id
-    private String id;
+	private String id;
 
-    private Integer number;
+	private Integer number;
 
-    private Date registerTime;
+	private Date registerTime;
 
-    public String getId() {
-        return id;
-    }
+	private String url;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public Integer getNumber() {
-        return number;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public void setNumber(Integer number) {
-        this.number = number;
-    }
+	public Integer getNumber() {
+		return number;
+	}
 
-    public Date getRegisterTime() {
-        return registerTime;
-    }
+	public void setNumber(Integer number) {
+		this.number = number;
+	}
 
-    public void setRegisterTime(Date registerTime) {
-        this.registerTime = registerTime;
-    }
+	public Date getRegisterTime() {
+		return registerTime;
+	}
+
+	public void setRegisterTime(Date registerTime) {
+		this.registerTime = registerTime;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
 }

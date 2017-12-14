@@ -24,7 +24,6 @@ import cn.drizzt.entity.SignalAuth;
 import cn.drizzt.entity.SignalBatch;
 import cn.drizzt.entity.SignalUser;
 import cn.drizzt.model.ApiResponse;
-import cn.drizzt.model.ApiResult;
 import cn.drizzt.model.BatchResponse;
 import cn.drizzt.service.SignalAuthService;
 import cn.drizzt.service.SignalBatchService;
@@ -87,6 +86,12 @@ public class AuthController {
 		SignalAuth signalAuth = signalAuthService.getById(id);
 		result.addObject("calling", signalAuth.getCalling());
 		int callResult = signalAuth.getCallResult();
+
+		// 暂时解决正在呼叫问题
+		if (callResult == 99 && System.currentTimeMillis() - signalAuth.getStartTime() > 60000) {
+			callResult = 98;
+		}
+
 		String cr = CallResultCH.getCH(callResult);
 		result.addObject("cr", cr);
 		return result;
@@ -148,7 +153,14 @@ public class AuthController {
 		for (SignalAuth signalAuth : signalAuths) {
 			BatchResponse batchResponse = new BatchResponse();
 			batchResponse.setCalling(signalAuth.getCalling());
-			batchResponse.setCallResult(CallResultCH.getCH(signalAuth.getCallResult()));
+			int callResult = signalAuth.getCallResult();
+
+			// 暂时解决正在呼叫问题
+			if (callResult == 99 && System.currentTimeMillis() - signalAuth.getStartTime() > 60000) {
+				callResult = 98;
+			}
+
+			batchResponse.setCallResult(CallResultCH.getCH(callResult));
 			batchResponses.add(batchResponse);
 		}
 		result.addObject("batchResponses", batchResponses);
@@ -177,10 +189,11 @@ public class AuthController {
 						signalAuth.setCalling(calling);
 						signalAuth.setStartTime(System.currentTimeMillis());
 						signalAuth.setCallResult(Const.CALL_RESULT_0);
+						signalAuth.setUserId(id);
 						signalAuthService.add(signalAuth);
-						signalUserService.reduceNumber(id);
+						// signalUserService.reduceNumber(id);
 						apiResponse.setCode(0);
-						apiResponse.setMsg(authId);
+						apiResponse.setMsg("发送成功");
 					} else {
 						apiResponse.setCode(-96);
 						apiResponse.setMsg("线路忙，请稍后");
@@ -197,34 +210,43 @@ public class AuthController {
 		return apiResponse;
 	}
 
-	@RequestMapping(value = "/apiResult/{id}/{authId}", method = RequestMethod.POST)
-	@ResponseBody
-	public Object apiResult(HttpServletRequest request, @PathVariable("id") String id,
-			@PathVariable("authId") String authId) throws Exception {
-		ApiResult apiResult = new ApiResult();
-		SignalUser signalUser = signalUserService.getById(id);
-		if (null == signalUser) {
-			apiResult.setCode(-99);
-			apiResult.setMsg("未授权");
-		} else {
-			SignalAuth signalAuth = signalAuthService.getById(authId);
-			if (null != signalAuth) {
-				int callResult = signalAuth.getCallResult();
-				String cr = CallResultCH.getCH(callResult);
-				apiResult.setCode(callResult);
-				String calling = signalAuth.getCalling();
-				if (calling.startsWith("0")) {
-					calling = calling.substring(1, calling.length());
-				}
-				apiResult.setCalling(calling);
-				apiResult.setMsg(cr);
-			} else {
-				apiResult.setCode(-95);
-				apiResult.setMsg("流水号不存在");
-			}
-		}
-		return apiResult;
-	}
+	// @RequestMapping(value = "/apiResult/{id}/{authId}", method =
+	// RequestMethod.POST)
+	// @ResponseBody
+	// public Object apiResult(HttpServletRequest request, @PathVariable("id")
+	// String id,
+	// @PathVariable("authId") String authId) throws Exception {
+	// ApiResult apiResult = new ApiResult();
+	// SignalUser signalUser = signalUserService.getById(id);
+	// if (null == signalUser) {
+	// apiResult.setCode(-99);
+	// apiResult.setMsg("未授权");
+	// } else {
+	// SignalAuth signalAuth = signalAuthService.getById(authId);
+	// if (null != signalAuth) {
+	// int callResult = signalAuth.getCallResult();
+	//
+	// // 暂时解决正在呼叫问题
+	// if (callResult == 99 && System.currentTimeMillis() -
+	// signalAuth.getStartTime() > 60000) {
+	// callResult = 98;
+	// }
+	//
+	// String cr = CallResultCH.getCH(callResult);
+	// apiResult.setCode(callResult);
+	// String calling = signalAuth.getCalling();
+	// if (calling.startsWith("0")) {
+	// calling = calling.substring(1, calling.length());
+	// }
+	// apiResult.setCalling(calling);
+	// apiResult.setMsg(cr);
+	// } else {
+	// apiResult.setCode(-95);
+	// apiResult.setMsg("流水号不存在");
+	// }
+	// }
+	// return apiResult;
+	// }
 
 	// @Autowired
 	// private SendMessageService sendMessageService;

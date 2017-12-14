@@ -63,6 +63,25 @@ public class AuthResource {
 			transTable.put("提醒", Const.CALL_RESULT_8);
 			transTable.put("提示", Const.CALL_RESULT_8);
 			transTable.put("呼转", Const.CALL_RESULT_8);
+			
+			//英文识别
+			transTable.put("乐风原创文艺炮", Const.CALL_RESULT_5);
+			transTable.put("鱼肝油的泡", Const.CALL_RESULT_5);
+			transTable.put("一张由的泡", Const.CALL_RESULT_5);
+			transTable.put("一张由黑袍老", Const.CALL_RESULT_5);
+			transTable.put("加油的泡老师", Const.CALL_RESULT_5);
+			transTable.put("很张扬的那种", Const.CALL_RESULT_6);
+			transTable.put("很长一的那点事", Const.CALL_RESULT_6);
+			transTable.put("哪里近", Const.CALL_RESULT_6);
+			transTable.put("哪里镇", Const.CALL_RESULT_6);
+			transTable.put("哪里进", Const.CALL_RESULT_6);
+			transTable.put("剩下来的", Const.CALL_RESULT_6);
+			transTable.put("更加累的", Const.CALL_RESULT_6);
+			transTable.put("那点吃的", Const.CALL_RESULT_7);
+			transTable.put("dlc日文", Const.CALL_RESULT_7);
+			transTable.put("早点吃呗", Const.CALL_RESULT_7);
+			transTable.put("早点四十呗", Const.CALL_RESULT_7);
+			transTable.put("射杀yahoo思维", Const.CALL_RESULT_7);
 
 			VoiceUtil.getToken();
 

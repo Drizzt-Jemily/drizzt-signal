@@ -32,6 +32,8 @@ public class SignalAuth extends BaseEntity {
 
 	private Integer callResult;
 
+	private String userId;
+
 	public String getId() {
 		return id;
 	}
@@ -142,5 +144,13 @@ public class SignalAuth extends BaseEntity {
 
 	public void setCallResult(Integer callResult) {
 		this.callResult = callResult;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 }

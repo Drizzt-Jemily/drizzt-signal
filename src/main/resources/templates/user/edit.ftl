@@ -18,7 +18,9 @@
 			<br> 用户账号：<br>
 			<br> ${user.id}<br>
 			<br> 剩余条数： <br>
-			<br> <input type="text" name="number" size="100" value="${user.number}" /><br>
+			<br> <input type="text" name="number" size="100" value="${user.number?c}" /><br>
+			<br> 回传URL： <br>
+			<br> <input type="text" name="url" size="100" value="${(user.url)!}" /><br>
 			<input type="submit" value="提交" />
 		</form>
 	</center>

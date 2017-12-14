@@ -36,7 +36,17 @@ public class ChManager {
 
 	private Long duration; // 验证持续时间
 
-	private boolean hangup = false;
+	private boolean hangup = false; // 是否已挂机
+
+	private String userId;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	public boolean isHangup() {
 		return hangup;

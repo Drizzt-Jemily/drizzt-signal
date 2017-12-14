@@ -63,5 +63,12 @@ public class UserController {
 			return "user/result";
 		}
 	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	public String test(@RequestParam(value = "a", required = true) String a,@RequestParam(value = "b", required = true) String b) {
+		System.out.println(a+"******************************");
+		System.out.println(b);
+		return "user/result";
+	}
 
 }

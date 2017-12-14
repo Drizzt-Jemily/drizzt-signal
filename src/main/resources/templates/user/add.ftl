@@ -18,6 +18,8 @@
 			<br> <input type="text" name="id" size="100" /><br>
 			<br> 剩余条数： <br>
 			<br> <input type="text" name="number" size="100" /><br>
+			<br> 回传URL： <br>
+			<br> <input type="text" name="url" size="100" /><br>
 			<input type="submit" value="添加" />
 		</form>
 	</center>

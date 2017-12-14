@@ -38,6 +38,7 @@ public class AuthDispatcher implements Runnable {
 					freeChManager.setCalled(called);
 					freeChManager.setStartTime(System.currentTimeMillis());
 					freeChManager.setUseStatus(true);
+					freeChManager.setUserId(waitAuth.getUserId());
 					ShUtil.INSTANCE.SsmSetTxCallerId(freeChManager.getCh(), called);
 					ShUtil.INSTANCE.SsmAutoDial(freeChManager.getCh(), freeChManager.getCalling());
 				}

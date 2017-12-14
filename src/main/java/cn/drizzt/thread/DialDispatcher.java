@@ -14,10 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cn.drizzt.entity.SignalAuth;
+import cn.drizzt.entity.SignalUser;
 import cn.drizzt.model.ChManager;
 import cn.drizzt.service.SignalAuthService;
+import cn.drizzt.service.SignalUserService;
+import cn.drizzt.util.CallResultCH;
 import cn.drizzt.util.Const;
 import cn.drizzt.util.ExceptionConstans;
+import cn.drizzt.util.HttpClientUtil;
 import cn.drizzt.util.ShUtil;
 import cn.drizzt.util.VoiceUtil;
 
@@ -34,6 +38,9 @@ public class DialDispatcher implements Runnable {
 
 	@Autowired
 	private SignalAuthService signalAuthService;
+
+	@Autowired
+	private SignalUserService signalUserService;
 
 	public void run() {
 		while (true) {
@@ -164,8 +171,9 @@ public class DialDispatcher implements Runnable {
 					ShUtil.INSTANCE.SsmHangup(ch);
 				}
 
-				if (b) { // 呼叫超时
-					chManager.setCallResult(Const.CALL_RESULT_98);
+				if (b) { // 呼叫超时，暂时按正常处理
+					// chManager.setCallResult(Const.CALL_RESULT_98);
+					chManager.setCallResult(Const.CALL_RESULT_1);
 				}
 
 				// 如果结果未变化，进行语音识别
@@ -223,11 +231,6 @@ public class DialDispatcher implements Runnable {
 				BeanUtils.copyProperties(signalAuth, chManager);
 				signalAuthService.update(signalAuth);
 
-				// 增加300毫秒释放通道时间
-				Thread.sleep(300);
-				// 重置线路
-				authResource.resetChManager(ch);
-
 			} catch (Exception e) {
 				LOGGER.error("ID号码为：" + chManager.getId() + ",本次呼叫出现异常！！！");
 				LOGGER.error(ExceptionConstans.getTrace(e));
@@ -254,13 +257,30 @@ public class DialDispatcher implements Runnable {
 				signalAuth.setCallResult(Const.CALL_RESULT_97);
 				signalAuthService.update(signalAuth);
 
+				// 如果有呼叫结果，扣费，然后回传给用户
+				if (chManager.getCallResult() != Const.CALL_RESULT_97) {
+					String userId = chManager.getUserId();
+					if (null != userId && !"".equals(userId)) {
+						SignalUser user = signalUserService.getById(userId);
+						signalUserService.reduceNumber(userId);
+						String url = user.getUrl();
+						if (null != url && !"".equals(url)) {
+							int callResult = chManager.getCallResult();
+							HttpClientUtil.sendHttpPost(url, "calling=" + chManager.getCalling() + "&code=" + callResult
+									+ "&msg=" + CallResultCH.getCH(callResult));
+						}
+					}
+				}
+
+			} finally {
+
 				// 增加300毫秒释放通道时间
 				try {
 					Thread.sleep(300);
-				} catch (InterruptedException e1) {
-					LOGGER.error(ExceptionConstans.getTrace(e));
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-
 				// 重置线路
 				authResource.resetChManager(chManager.getCh());
 			}
