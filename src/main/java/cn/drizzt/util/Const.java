@@ -30,7 +30,7 @@ public class Const {
 	// 呼叫状态
 	public static final int CALL_RESULT_0 = 0; // 未呼叫
 	public static final int CALL_RESULT_99 = 99; // 正在呼叫
-	public static final int CALL_RESULT_98 = 98; // 呼叫超时
+	public static final int CALL_RESULT_98 = 98; // 呼叫无应答（呼叫超时）
 	public static final int CALL_RESULT_97 = 97; // 呼叫失败
 	public static final int CALL_RESULT_1 = 1; // 正常号码
 	public static final int CALL_RESULT_2 = 2; // 被接听

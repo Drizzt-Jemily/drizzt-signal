@@ -14,14 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cn.drizzt.entity.SignalAuth;
-import cn.drizzt.entity.SignalUser;
 import cn.drizzt.model.ChManager;
 import cn.drizzt.service.SignalAuthService;
 import cn.drizzt.service.SignalUserService;
-import cn.drizzt.util.CallResultCH;
 import cn.drizzt.util.Const;
 import cn.drizzt.util.ExceptionConstans;
-import cn.drizzt.util.HttpClientUtil;
 import cn.drizzt.util.ShUtil;
 import cn.drizzt.util.VoiceUtil;
 
@@ -261,14 +258,15 @@ public class DialDispatcher implements Runnable {
 				if (chManager.getCallResult() != Const.CALL_RESULT_97) {
 					String userId = chManager.getUserId();
 					if (null != userId && !"".equals(userId)) {
-						SignalUser user = signalUserService.getById(userId);
+						// SignalUser user = signalUserService.getById(userId);
 						signalUserService.reduceNumber(userId);
-						String url = user.getUrl();
-						if (null != url && !"".equals(url)) {
-							int callResult = chManager.getCallResult();
-							HttpClientUtil.sendHttpPost(url, "calling=" + chManager.getCalling() + "&code=" + callResult
-									+ "&msg=" + CallResultCH.getCH(callResult));
-						}
+						// String url = user.getUrl();
+						// if (null != url && !"".equals(url)) {
+						// int callResult = chManager.getCallResult();
+						// HttpClientUtil.sendHttpPost(url, "calling=" + chManager.getCalling() +
+						// "&code=" + callResult
+						// + "&msg=" + CallResultCH.getCH(callResult));
+						// }
 					}
 				}
 
