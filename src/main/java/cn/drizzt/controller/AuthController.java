@@ -157,7 +157,7 @@ public class AuthController {
 			int callResult = signalAuth.getCallResult();
 
 			// 暂时解决正在呼叫问题
-			if (callResult == 99 && System.currentTimeMillis() - signalAuth.getStartTime() > 60000) {
+			if (callResult == 99 && System.currentTimeMillis() - signalAuth.getStartTime() > Const.CHMANAGER_TIMEOUT) {
 				callResult = 98;
 			}
 

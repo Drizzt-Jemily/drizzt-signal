@@ -227,6 +227,22 @@ public class DialDispatcher implements Runnable {
 
 				BeanUtils.copyProperties(signalAuth, chManager);
 				signalAuthService.update(signalAuth);
+				
+				// 如果有呼叫结果，扣费，然后回传给用户
+				if (chManager.getCallResult() != Const.CALL_RESULT_97) {
+					String userId = chManager.getUserId();
+					if (null != userId && !"".equals(userId)) {
+						// SignalUser user = signalUserService.getById(userId);
+						signalUserService.reduceNumber(userId);
+						// String url = user.getUrl();
+						// if (null != url && !"".equals(url)) {
+						// int callResult = chManager.getCallResult();
+						// HttpClientUtil.sendHttpPost(url, "calling=" + chManager.getCalling() +
+						// "&code=" + callResult
+						// + "&msg=" + CallResultCH.getCH(callResult));
+						// }
+					}
+				}
 
 			} catch (Exception e) {
 				LOGGER.error("ID号码为：" + chManager.getId() + ",本次呼叫出现异常！！！");
@@ -254,30 +270,13 @@ public class DialDispatcher implements Runnable {
 				signalAuth.setCallResult(Const.CALL_RESULT_97);
 				signalAuthService.update(signalAuth);
 
-				// 如果有呼叫结果，扣费，然后回传给用户
-				if (chManager.getCallResult() != Const.CALL_RESULT_97) {
-					String userId = chManager.getUserId();
-					if (null != userId && !"".equals(userId)) {
-						// SignalUser user = signalUserService.getById(userId);
-						signalUserService.reduceNumber(userId);
-						// String url = user.getUrl();
-						// if (null != url && !"".equals(url)) {
-						// int callResult = chManager.getCallResult();
-						// HttpClientUtil.sendHttpPost(url, "calling=" + chManager.getCalling() +
-						// "&code=" + callResult
-						// + "&msg=" + CallResultCH.getCH(callResult));
-						// }
-					}
-				}
-
 			} finally {
 
 				// 增加300毫秒释放通道时间
 				try {
 					Thread.sleep(300);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					LOGGER.error(ExceptionConstans.getTrace(e));
 				}
 				// 重置线路
 				authResource.resetChManager(chManager.getCh());
