@@ -88,7 +88,13 @@ public class DialDispatcher implements Runnable {
 				int i = 0;
 				boolean b = true; // 循环控制器
 
-				while (b && i < Const.DIAL_TIMEOUT) {
+				// 控制sip和中继的超时时间
+				int timeout = Const.DIAL_TIMEOUT;
+				if (ch < Const.SIP_NUMBER) {
+					timeout = Const.SIP_DIAL_TIMEOUT;
+				}
+
+				while (b && i < timeout) {
 					// 每隔8毫秒监测一次通道状态
 					i += 8;
 					Thread.sleep(8);
@@ -132,7 +138,7 @@ public class DialDispatcher implements Runnable {
 					}
 
 					// autoDial判断逻辑
-					if (ssmChkAutoDial == 2) {
+					if (ssmChkAutoDial == 2 || ssmChkAutoDial == 13) {
 						if (autoDial == 0) {
 							chManager.setAutoDial(ssmChkAutoDial);
 						}
@@ -227,13 +233,13 @@ public class DialDispatcher implements Runnable {
 
 				BeanUtils.copyProperties(signalAuth, chManager);
 				signalAuthService.update(signalAuth);
-				
-				// 如果有呼叫结果，扣费，然后回传给用户
-				if (chManager.getCallResult() != Const.CALL_RESULT_97) {
+
+				// 如果呼叫失败，将钱返还
+				if (chManager.getCallResult() == Const.CALL_RESULT_97) {
 					String userId = chManager.getUserId();
 					if (null != userId && !"".equals(userId)) {
 						// SignalUser user = signalUserService.getById(userId);
-						signalUserService.reduceNumber(userId);
+						signalUserService.increaseNumber(userId);
 						// String url = user.getUrl();
 						// if (null != url && !"".equals(url)) {
 						// int callResult = chManager.getCallResult();

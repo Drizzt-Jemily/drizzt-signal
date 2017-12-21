@@ -36,7 +36,18 @@ public class AuthResource {
 			Thread.sleep(Const.CARD_SLEEPTIME);
 			LOGGER.info("板卡启动成功");
 			chManagerPool = new ConcurrentHashMap<Integer, ChManager>();
-			for (int j = 120; j < Const.CARD_NUMBER+120; j++) {
+
+			// 初始化sip线路，从0开始
+			for (int j = 0; j < Const.SIP_NUMBER; j++) {
+				int state = ShUtil.INSTANCE.SsmGetChState(j);
+				LOGGER.info(j + "通道状态：" + state);
+				if (state == 0) {
+					chManagerPool.put(j, new ChManager(j));
+				}
+			}
+
+			// 初始化中继线路，从120开始
+			for (int j = 120; j < Const.CARD_NUMBER + 120; j++) {
 				int state = ShUtil.INSTANCE.SsmGetChState(j);
 				LOGGER.info(j + "通道状态：" + state);
 				if (state == 0) {
@@ -63,8 +74,8 @@ public class AuthResource {
 			transTable.put("提醒", Const.CALL_RESULT_8);
 			transTable.put("提示", Const.CALL_RESULT_8);
 			transTable.put("呼转", Const.CALL_RESULT_8);
-			
-			//英文识别
+
+			// 英文识别
 			transTable.put("乐风原创文艺炮", Const.CALL_RESULT_5);
 			transTable.put("鱼肝油的泡", Const.CALL_RESULT_5);
 			transTable.put("一张由的泡", Const.CALL_RESULT_5);

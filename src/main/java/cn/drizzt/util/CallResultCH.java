@@ -5,7 +5,7 @@ public class CallResultCH {
 	public static String getCH(int callResult) {
 		String cr = "";
 		if (callResult == Const.CALL_RESULT_0) {
-			cr = "未呼叫";
+			cr = "处理中";
 		} else if (callResult == Const.CALL_RESULT_99) {
 			cr = "正在呼叫";
 		} else if (callResult == Const.CALL_RESULT_98) {

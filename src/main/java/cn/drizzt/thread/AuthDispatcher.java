@@ -30,17 +30,22 @@ public class AuthDispatcher implements Runnable {
 			if (waitAuth != null) {
 				ChManager freeChManager = authResource.getFreeChManager();
 				if (freeChManager != null) {
+					int ch = freeChManager.getCh();
 					waitAuth.setCallResult(Const.CALL_RESULT_99);
 					signalAuthService.update(waitAuth);
 					freeChManager.setId(waitAuth.getId());
 					freeChManager.setCalling(waitAuth.getCalling());
-					String called = getCalled();
-					freeChManager.setCalled(called);
 					freeChManager.setStartTime(System.currentTimeMillis());
 					freeChManager.setUseStatus(true);
 					freeChManager.setUserId(waitAuth.getUserId());
-					ShUtil.INSTANCE.SsmSetTxCallerId(freeChManager.getCh(), called);
-					ShUtil.INSTANCE.SsmAutoDial(freeChManager.getCh(), freeChManager.getCalling());
+					
+					// 如果不是sip线路，则设置主叫号
+					if (ch > Const.SIP_NUMBER) {
+						String called = getCalled();
+						freeChManager.setCalled(called);
+						ShUtil.INSTANCE.SsmSetTxCallerId(ch, called);
+					}
+					ShUtil.INSTANCE.SsmAutoDial(ch, freeChManager.getCalling());
 				}
 			}
 			try {
@@ -56,5 +61,5 @@ public class AuthDispatcher implements Runnable {
 		Random random = new Random();
 		return Const.CODE_POOL[random.nextInt(i)];
 	}
-	
+
 }

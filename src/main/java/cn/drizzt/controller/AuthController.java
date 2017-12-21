@@ -59,7 +59,7 @@ public class AuthController {
 			@RequestParam(value = "pwd", required = true) String pwd) throws Exception {
 		ModelAndView result = new ModelAndView("waiting");
 		String id = "";
-		if (pwd.equals("drizzt1117")) {
+		if (pwd.equals("drizzt1205")) {
 			Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
 			Matcher callingPattern = pattern.matcher(calling);
 			if (callingPattern.matches()) {
@@ -104,7 +104,7 @@ public class AuthController {
 		ModelAndView result = new ModelAndView("batchWaiting");
 		String batchId = "";
 		List<Integer> is = new ArrayList<Integer>();
-		if (pwd.equals("drizzt1117")) {
+		if (pwd.equals("drizzt1205")) {
 			if (file.getContentType().equals("text/plain")) {
 				Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
 				BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
@@ -182,22 +182,37 @@ public class AuthController {
 				Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
 				Matcher callingPattern = pattern.matcher(calling);
 				if (callingPattern.matches()) {
-					if (authResource.getFreeNum() > 0) {
+					SignalAuth lastCalling = signalAuthService.getByLastCalling(calling);
+					if (null != lastCalling && lastCalling.getCallResult() > 0 && lastCalling.getCallResult() < 50) {
 						SignalAuth signalAuth = new SignalAuth();
 						String authId = Numbers.uuid();
 						signalAuth.setId(authId);
-						calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
 						signalAuth.setCalling(calling);
 						signalAuth.setStartTime(System.currentTimeMillis());
-						signalAuth.setCallResult(Const.CALL_RESULT_0);
+						signalAuth.setCallResult(lastCalling.getCallResult());
 						signalAuth.setUserId(id);
+						signalUserService.reduceNumber(id);
 						signalAuthService.add(signalAuth);
-//						signalUserService.reduceNumber(id);
 						apiResponse.setCode(0);
 						apiResponse.setMsg(authId);
 					} else {
-						apiResponse.setCode(-96);
-						apiResponse.setMsg("线路忙，请稍后");
+						if (authResource.getFreeNum() > 0) {
+							SignalAuth signalAuth = new SignalAuth();
+							String authId = Numbers.uuid();
+							signalAuth.setId(authId);
+							calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
+							signalAuth.setCalling(calling);
+							signalAuth.setStartTime(System.currentTimeMillis());
+							signalAuth.setCallResult(Const.CALL_RESULT_0);
+							signalAuth.setUserId(id);
+							signalUserService.reduceNumber(id);
+							signalAuthService.add(signalAuth);
+							apiResponse.setCode(0);
+							apiResponse.setMsg(authId);
+						} else {
+							apiResponse.setCode(-96);
+							apiResponse.setMsg("线路忙，请稍后");
+						}
 					}
 				} else {
 					apiResponse.setCode(-98);
@@ -224,6 +239,16 @@ public class AuthController {
 			SignalAuth signalAuth = signalAuthService.getById(authId);
 			if (null != signalAuth) {
 				int callResult = signalAuth.getCallResult();
+
+				// 暂时解决正在呼叫问题
+				if (callResult == 99) {
+					if (System.currentTimeMillis() - signalAuth.getStartTime() > Const.CHMANAGER_TIMEOUT) {
+						callResult = Const.CALL_RESULT_98;
+					} else {
+						callResult = Const.CALL_RESULT_0;
+					}
+				}
+
 				String cr = CallResultCH.getCH(callResult);
 				apiResult.setCode(callResult);
 				String calling = signalAuth.getCalling();

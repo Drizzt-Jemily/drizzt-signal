@@ -50,4 +50,19 @@ public class SignalAuthService {
 		return signalAuthMapper.selectByExample(example);
 	}
 
+	public SignalAuth getByLastCalling(String calling) {
+		SignalAuthExample example = new SignalAuthExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andCallingEqualTo(calling);
+		example.setPageIndex(1);
+		example.setPageSize(1);
+		example.setOrderByClause("start_time desc");
+		List<SignalAuth> signalAuths = signalAuthMapper.selectByExample(example);
+		if (signalAuths.size() > 0) {
+			return signalAuths.get(0);
+		} else {
+			return null;
+		}
+	}
+
 }

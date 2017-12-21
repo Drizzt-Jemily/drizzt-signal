@@ -22,6 +22,10 @@ public class SignalUserService {
 		signalUserMapper.reduceNumber(id);
 	}
 	
+	public void increaseNumber(String id) {
+		signalUserMapper.increaseNumber(id);
+	}
+	
 	public List<SignalUser> getAll(){
 		return signalUserMapper.selectAll();
 	}
