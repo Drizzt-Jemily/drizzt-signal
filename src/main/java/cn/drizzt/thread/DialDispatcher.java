@@ -81,7 +81,6 @@ public class DialDispatcher implements Runnable {
 		 * 
 		 * @throws InterruptedException
 		 */
-		@SuppressWarnings("unused")
 		private void handAuthQueue() {
 			try {
 				int ch = chManager.getCh();
