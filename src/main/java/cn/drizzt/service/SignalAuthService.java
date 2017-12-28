@@ -60,7 +60,7 @@ public class SignalAuthService {
 		List<SignalAuth> signalAuths = signalAuthMapper.selectByExample(example);
 		if (signalAuths.size() > 0) {
 			SignalAuth signalAuth = signalAuths.get(0);
-			if (System.currentTimeMillis() - signalAuth.getStartTime() < 24 * 60 * 60 * 1000) {
+			if (System.currentTimeMillis() - signalAuth.getStartTime() < 4 * 60 * 60 * 1000) {
 				return signalAuth;
 			} else {
 				return null;
