@@ -59,7 +59,7 @@ public class AuthController {
 			@RequestParam(value = "pwd", required = true) String pwd) throws Exception {
 		ModelAndView result = new ModelAndView("waiting");
 		String id = "";
-		if (pwd.equals("drizzt1205")) {
+		if (pwd.equals("zxcasd2018")) {
 			Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
 			Matcher callingPattern = pattern.matcher(calling);
 			if (callingPattern.matches()) {
@@ -104,7 +104,7 @@ public class AuthController {
 		ModelAndView result = new ModelAndView("batchWaiting");
 		String batchId = "";
 		List<Integer> is = new ArrayList<Integer>();
-		if (pwd.equals("drizzt1205")) {
+		if (pwd.equals("zxcasd2018")) {
 			if (file.getContentType().equals("text/plain")) {
 				Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
 				BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
@@ -183,7 +183,7 @@ public class AuthController {
 				Matcher callingPattern = pattern.matcher(calling);
 				if (callingPattern.matches()) {
 					SignalAuth lastCalling = signalAuthService.getByLastCalling(calling);
-					if (null != lastCalling && lastCalling.getCallResult() > 0 && lastCalling.getCallResult() < 50) {
+					if (null != lastCalling) {
 						SignalAuth signalAuth = new SignalAuth();
 						String authId = Numbers.uuid();
 						signalAuth.setId(authId);

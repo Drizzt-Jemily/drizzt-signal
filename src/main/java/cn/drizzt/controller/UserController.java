@@ -37,7 +37,7 @@ public class UserController {
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public String add(@RequestParam(value = "pwd", required = true) String pwd, SignalUser signalUser) {
-		if (pwd.equals("drizzt1205")) {
+		if (pwd.equals("zxcasd2018")) {
 			signalUser.setRegisterTime(new Date());
 			signalUserService.add(signalUser);
 			return "redirect:/user";
@@ -56,7 +56,7 @@ public class UserController {
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public String edit(@RequestParam(value = "pwd", required = true) String pwd, SignalUser signalUser) {
-		if (pwd.equals("drizzt1205")) {
+		if (pwd.equals("zxcasd2018")) {
 			signalUserService.edit(signalUser);
 			return "redirect:/user";
 		} else {

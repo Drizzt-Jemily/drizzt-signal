@@ -60,8 +60,23 @@ public class SignalAuthService {
 		List<SignalAuth> signalAuths = signalAuthMapper.selectByExample(example);
 		if (signalAuths.size() > 0) {
 			SignalAuth signalAuth = signalAuths.get(0);
-			if (System.currentTimeMillis() - signalAuth.getStartTime() < 4 * 60 * 60 * 1000) {
-				return signalAuth;
+			long startTime = signalAuth.getStartTime();
+			Integer callResult = signalAuth.getCallResult();
+			if (System.currentTimeMillis() - startTime < 4 * 60 * 60 * 1000) {
+				if (callResult == Const.CALL_RESULT_5 || callResult == Const.CALL_RESULT_7
+						|| callResult == Const.CALL_RESULT_8) {
+					return signalAuth;
+				} else {
+					return null;
+				}
+			} else if (System.currentTimeMillis() - startTime < 24 * 60 * 60 * 1000) {
+				if (callResult == Const.CALL_RESULT_1 || callResult == Const.CALL_RESULT_2
+						|| callResult == Const.CALL_RESULT_3 || callResult == Const.CALL_RESULT_4
+						|| callResult == Const.CALL_RESULT_6) {
+					return signalAuth;
+				} else {
+					return null;
+				}
 			} else {
 				return null;
 			}
