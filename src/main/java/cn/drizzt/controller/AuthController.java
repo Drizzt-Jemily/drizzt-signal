@@ -164,6 +164,7 @@ public class AuthController {
 			batchResponse.setCallResult(CallResultCH.getCH(callResult));
 			batchResponses.add(batchResponse);
 		}
+		result.addObject("batchId", batchId);
 		result.addObject("batchResponses", batchResponses);
 		return result;
 	}

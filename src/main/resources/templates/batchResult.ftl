@@ -13,6 +13,7 @@
 	<br>
 	<br>
 	<center>
+		查询结果页面地址：http://121.79.134.142:8080/auth/batchResult/${batchId}
 		<table border="1">
 			<tr>
 				<td>手机号码</td>

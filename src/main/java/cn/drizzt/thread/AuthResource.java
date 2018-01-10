@@ -63,6 +63,8 @@ public class AuthResource {
 			transTable.put("不方便", Const.CALL_RESULT_3);
 			transTable.put("限制", Const.CALL_RESULT_4);
 			transTable.put("设置", Const.CALL_RESULT_4);
+			transTable.put("未开通", Const.CALL_RESULT_4);
+			transTable.put("语音通话", Const.CALL_RESULT_4);
 			transTable.put("关机", Const.CALL_RESULT_5);
 			transTable.put("已关", Const.CALL_RESULT_5);
 			transTable.put("空", Const.CALL_RESULT_6);
@@ -74,6 +76,8 @@ public class AuthResource {
 			transTable.put("提醒", Const.CALL_RESULT_8);
 			transTable.put("提示", Const.CALL_RESULT_8);
 			transTable.put("呼转", Const.CALL_RESULT_8);
+			
+			transTable.put("稍后", Const.CALL_RESULT_3);
 
 			// 英文识别
 			transTable.put("乐风原创文艺炮", Const.CALL_RESULT_5);

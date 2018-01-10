@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.github.pagehelper.PageHelper;
-
 import cn.drizzt.entity.SignalMobile;
 import cn.drizzt.entity.SignalMobileExample;
 import cn.drizzt.entity.SignalMobileExample.Criteria;
@@ -37,14 +35,6 @@ public class SignalMobileService {
 		signalMobileMapper.insertSelective(signalMobile);
 	}
 	
-	public List<SignalMobile> getAll(SignalMobile signalMobile) {
-        if (signalMobile.getPage() != null && signalMobile.getRows() != null) {
-        	PageHelper.orderBy("mobile_number desc");
-            PageHelper.startPage(signalMobile.getPage(), signalMobile.getRows());
-        }
-        return signalMobileMapper.selectAll();
-    }
-
 	public String convertCalling(String calling, String areaCode) {
 		String tmp = calling.substring(0, 7);
 		try {

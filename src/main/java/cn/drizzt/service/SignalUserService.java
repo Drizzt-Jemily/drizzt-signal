@@ -6,28 +6,34 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.drizzt.entity.SignalUser;
+import cn.drizzt.entity.SignalUserExample;
 import cn.drizzt.mapper.SignalUserMapper;
+import cn.drizzt.mapper.SignalUserMapperEx;
 
 @Service
 public class SignalUserService {
 
 	@Autowired
 	private SignalUserMapper signalUserMapper;
+	
+	@Autowired
+	private SignalUserMapperEx signalUserMapperEx;
 
 	public SignalUser getById(String id) {
 		return signalUserMapper.selectByPrimaryKey(id);
 	}
 
 	public void reduceNumber(String id) {
-		signalUserMapper.reduceNumber(id);
+		signalUserMapperEx.reduceNumber(id);
 	}
 	
 	public void increaseNumber(String id) {
-		signalUserMapper.increaseNumber(id);
+		signalUserMapperEx.increaseNumber(id);
 	}
 	
 	public List<SignalUser> getAll(){
-		return signalUserMapper.selectAll();
+		SignalUserExample example = new SignalUserExample();
+		return signalUserMapper.selectByExample(example);
 	}
 	
 	public void add(SignalUser signalUser){

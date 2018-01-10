@@ -21,7 +21,7 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
 
 	@Autowired
 	private AuthResource authResource;
-	
+
 	public static void main(String[] args) throws Exception {
 		SpringApplication.run(Application.class, args);
 	}
@@ -36,9 +36,9 @@ public class Application extends WebMvcConfigurerAdapter implements CommandLineR
 		ModelAndView result = new ModelAndView("index");
 		return result;
 	}
-	
+
 	@RequestMapping("/batch")
-	public ModelAndView batch () {
+	public ModelAndView batch() {
 		ModelAndView result = new ModelAndView("batch");
 		return result;
 	}

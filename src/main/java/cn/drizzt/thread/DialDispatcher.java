@@ -116,9 +116,11 @@ public class DialDispatcher implements Runnable {
 						chManager.setRecordStatus(2);
 					}
 					if (recordStatus == 2 && ssmChkRecToFile == 0) {
+						//给板卡保存录音的时间
+						Thread.sleep(200);
 						chManager.setRecordStatus(3);
-						ShUtil.INSTANCE.SsmHangup(ch);
-						chManager.setHangup(true);
+						// ShUtil.INSTANCE.SsmHangup(ch);
+						// chManager.setHangup(true);
 						b = false;
 					}
 
@@ -127,7 +129,7 @@ public class DialDispatcher implements Runnable {
 						if (toneAnalyze == 0) {
 							chManager.setToneAnalyze(ssmGetToneAnalyzeResult);
 						}
-						ShUtil.INSTANCE.SsmHangup(ch);
+						// ShUtil.INSTANCE.SsmHangup(ch);
 						b = false;
 						chManager.setCallResult(Const.CALL_RESULT_1);
 					} else if (ssmGetToneAnalyzeResult == 6) {
@@ -154,14 +156,14 @@ public class DialDispatcher implements Runnable {
 						if (autoDial != 7) {
 							chManager.setAutoDial(ssmChkAutoDial);
 						}
-						ShUtil.INSTANCE.SsmHangup(ch);
+						// ShUtil.INSTANCE.SsmHangup(ch);
 						b = false;
 						chManager.setCallResult(Const.CALL_RESULT_2);
 					} else if (ssmChkAutoDial == 11) {
 						if (autoDial != 11) {
 							chManager.setAutoDial(ssmChkAutoDial);
 						}
-						ShUtil.INSTANCE.SsmHangup(ch);
+						// ShUtil.INSTANCE.SsmHangup(ch);
 						b = false;
 						chManager.setCallResult(Const.CALL_RESULT_97);
 					}
@@ -169,9 +171,9 @@ public class DialDispatcher implements Runnable {
 				}
 
 				// 如果在呼叫过程中未挂机，执行挂机操作
-				if (!chManager.isHangup()) {
-					ShUtil.INSTANCE.SsmHangup(ch);
-				}
+				// if (!chManager.isHangup()) {
+				// ShUtil.INSTANCE.SsmHangup(ch);
+				// }
 
 				if (b) { // 呼叫超时，暂时按正常处理
 					// chManager.setCallResult(Const.CALL_RESULT_98);
@@ -254,9 +256,9 @@ public class DialDispatcher implements Runnable {
 				LOGGER.error(ExceptionConstans.getTrace(e));
 
 				// 关闭线路
-				if (!chManager.isHangup()) {
-					ShUtil.INSTANCE.SsmHangup(chManager.getCallResult());
-				}
+				// if (!chManager.isHangup()) {
+				// ShUtil.INSTANCE.SsmHangup(chManager.getCh());
+				// }
 
 				// 属性拷贝并保存数据库
 				SignalAuth signalAuth = new SignalAuth();
@@ -276,6 +278,10 @@ public class DialDispatcher implements Runnable {
 				signalAuthService.update(signalAuth);
 
 			} finally {
+
+				// 关闭线路
+				ShUtil.INSTANCE.SsmHangup(chManager.getCh());
+				chManager.setHangup(true);
 
 				// 增加300毫秒释放通道时间
 				try {
