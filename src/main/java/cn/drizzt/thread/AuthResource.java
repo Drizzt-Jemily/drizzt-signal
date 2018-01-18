@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cn.drizzt.entity.SignalAuth;
 import cn.drizzt.model.ChManager;
 import cn.drizzt.util.Const;
 import cn.drizzt.util.ShUtil;
@@ -29,6 +31,8 @@ public class AuthResource {
 	private Map<Integer, ChManager> chManagerPool;
 
 	private Map<String, Integer> transTable;
+	
+	private LinkedBlockingQueue<SignalAuth> authQueue;
 
 	public void init() throws Exception {
 		int i = ShUtil.INSTANCE.SsmStartCti(Const.CTI_INI_PATH + "ShConfig.ini", Const.CTI_INI_PATH + "ShIndex.ini");
@@ -100,6 +104,8 @@ public class AuthResource {
 
 			VoiceUtil.getToken();
 
+			authQueue = new LinkedBlockingQueue<SignalAuth>();
+			
 			new Thread(authDispatcher).start();
 			new Thread(dialDispatcher).start();
 
@@ -146,6 +152,18 @@ public class AuthResource {
 			}
 		}
 		return i;
+	}
+	
+	public void addAuth(SignalAuth auth) {
+		authQueue.add(auth);
+	}
+	
+	public SignalAuth getAuth() {
+		return authQueue.poll();
+	}
+	
+	public int getQueueNum() {
+		return authQueue.size();
 	}
 
 }

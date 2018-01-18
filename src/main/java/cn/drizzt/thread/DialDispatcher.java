@@ -117,7 +117,7 @@ public class DialDispatcher implements Runnable {
 					}
 					if (recordStatus == 2 && ssmChkRecToFile == 0) {
 						//给板卡保存录音的时间
-						Thread.sleep(200);
+						Thread.sleep(500);
 						chManager.setRecordStatus(3);
 						// ShUtil.INSTANCE.SsmHangup(ch);
 						// chManager.setHangup(true);
