@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<classPathEntry location="mysql-connector-java-5.1.12-bin.jar" />
+
+	<context id="cia" targetRuntime="MyBatis3">
+	
+		<!-- xml文件是否在原有基础上合并，默认是false -->
+		<property name="mergeable" value="false"></property>
+		
+		<plugin type="org.mybatis.generator.plugins.MysqlPagePlugin" />
+
+		<commentGenerator>
+			<property name="suppressAllComments" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			connectionURL="jdbc:mysql://121.79.134.142:3306/drizzt" userId="root"
+			password="drizzt">
+		</jdbcConnection>
+
+		<javaModelGenerator targetPackage="cn.drizzt.entity"
+			targetProject="./project" />
+
+		<sqlMapGenerator targetPackage="cn.drizzt.mapper"
+			targetProject="./project" />
+
+		<javaClientGenerator type="XMLMAPPER"
+			targetPackage="cn.drizzt.mapper" targetProject="./project" />
+
+		<table schema="" tableName="%">
+		</table>
+	</context>
+</generatorConfiguration>

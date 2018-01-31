@@ -12,13 +12,9 @@ import java.net.URL;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.log4j.Logger;
-
 import net.sf.json.JSONObject;
 
 public class VoiceUtil {
-
-	private static Logger LOGGER = Logger.getLogger(VoiceUtil.class);
 
 	private static final String serverURL = "http://vop.baidu.com/server_api";
 	private static String token = "";
@@ -49,7 +45,7 @@ public class VoiceUtil {
 		try {
 			loadFile = loadFile(pcmFile);
 		} catch (IOException e1) {
-			LOGGER.error(ExceptionConstans.getTrace(e1));
+			e1.printStackTrace();
 			return "";
 		}
 		if (null != loadFile) {
@@ -96,7 +92,7 @@ public class VoiceUtil {
 				}
 				return Translation;
 			} catch (Exception e) {
-				LOGGER.error(ExceptionConstans.getTrace(e));
+				e.printStackTrace();
 				return "";
 			}
 		} else {

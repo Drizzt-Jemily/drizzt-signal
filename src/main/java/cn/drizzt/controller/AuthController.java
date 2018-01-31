@@ -197,7 +197,7 @@ public class AuthController {
 						apiResponse.setCode(0);
 						apiResponse.setMsg(authId);
 					} else {
-						if (authResource.getFreeNum() > 0) {
+						if (authResource.getQueueNum() < Const.CARD_NUMBER) {
 							SignalAuth signalAuth = new SignalAuth();
 							String authId = Numbers.uuid();
 							signalAuth.setId(authId);

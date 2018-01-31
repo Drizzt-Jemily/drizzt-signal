@@ -35,6 +35,13 @@ public class SignalAuthService {
 			return null;
 		}
 	}
+	
+	public int getWaitAuthNum() {
+		SignalAuthExample example = new SignalAuthExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andCallResultEqualTo(Const.CALL_RESULT_0);
+		return signalAuthMapper.countByExample(example);
+	}
 
 	public void update(SignalAuth signalAuth) {
 		signalAuthMapper.updateByPrimaryKeySelective(signalAuth);

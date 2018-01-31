@@ -37,15 +37,15 @@ public class Const {
 			"56617595", "56617596", "56617597", "56617598", "56617599" };
 
 	public static final int CARD_SLEEPTIME = 15000; // 板卡启动时间
-	public static final int SIP_NUMBER = 100; // sip话路数量
-	public static final int CARD_NUMBER = 30; // 话路数量
+	// public static final int SIP_NUMBER = 0; // sip话路数量
+	public static final int CARD_NUMBER = 60; // 话路数量
 	public static final int CHMANAGER_TIMEOUT = 20000; // 线路超时时间
 	public static final int DIAL_TIMEOUT = 10000; // 呼叫超时时间
-	public static final int SIP_DIAL_TIMEOUT = 8000; // sip呼叫超时时间
+	// public static final int SIP_DIAL_TIMEOUT = 8000; // sip呼叫超时时间
 	public static final int RECORD_TIME = 6000; // 录音时间
 	public static final int DIAL_DELAY = 5000; // 话路延时释放时间
 
-	public static final int DISPATCHER_SLEEPTIME = 200; // 调度器睡眠时间
+	public static final int DISPATCHER_SLEEPTIME = 100; // 调度器睡眠时间
 	public static final int POOL_KEEPALIVE_SECOND = 5; // 线程存活时间
 
 	// 呼叫状态
