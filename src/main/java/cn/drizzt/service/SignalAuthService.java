@@ -35,7 +35,7 @@ public class SignalAuthService {
 			return null;
 		}
 	}
-	
+
 	public int getWaitAuthNum() {
 		SignalAuthExample example = new SignalAuthExample();
 		Criteria criteria = example.createCriteria();
@@ -71,7 +71,9 @@ public class SignalAuthService {
 			SignalAuth signalAuth = signalAuths.get(0);
 			long startTime = signalAuth.getStartTime();
 			Integer callResult = signalAuth.getCallResult();
-			if (System.currentTimeMillis() - startTime < 4 * 60 * 60 * 1000) {
+			if (callResult == 0 || callResult == 99) {
+				return signalAuth;
+			} else if (System.currentTimeMillis() - startTime < 4 * 60 * 60 * 1000) {
 				if (callResult == Const.CALL_RESULT_5 || callResult == Const.CALL_RESULT_7
 						|| callResult == Const.CALL_RESULT_8) {
 					return signalAuth;

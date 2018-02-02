@@ -38,7 +38,7 @@ public class Const {
 
 	public static final int CARD_SLEEPTIME = 15000; // 板卡启动时间
 	// public static final int SIP_NUMBER = 0; // sip话路数量
-	public static final int CARD_NUMBER = 60; // 话路数量
+	public static final int CARD_NUMBER = 90; // 话路数量
 	public static final int CHMANAGER_TIMEOUT = 20000; // 线路超时时间
 	public static final int DIAL_TIMEOUT = 10000; // 呼叫超时时间
 	// public static final int SIP_DIAL_TIMEOUT = 8000; // sip呼叫超时时间

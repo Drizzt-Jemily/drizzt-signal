@@ -5,9 +5,9 @@ public class CallResultCH {
 	public static String getCH(int callResult) {
 		String cr = "";
 		if (callResult == Const.CALL_RESULT_0) {
-			cr = "处理中";
+			cr = "处理中，请间隔10秒后再试";
 		} else if (callResult == Const.CALL_RESULT_99) {
-			cr = "正在呼叫";
+			cr = "正在呼叫，请间隔10秒后再试";
 		} else if (callResult == Const.CALL_RESULT_98) {
 			cr = "呼叫无应答";
 		} else if (callResult == Const.CALL_RESULT_97) {
