@@ -18,6 +18,8 @@ public interface ShUtil extends Library {
 	public int SsmGetChState(int ch);
 
 	public int SsmSetTxCallerId(int ch, String phNum);
+	
+	public int SsmSipSetTxUserName(int ch, String phNum);
 
 	public int SsmAutoDial(int ch, String phNum);
 

@@ -80,7 +80,7 @@ public class SignalAuthService {
 				} else {
 					return null;
 				}
-			} else if (System.currentTimeMillis() - startTime < 24 * 60 * 60 * 1000) {
+			} else if (System.currentTimeMillis() - startTime < 4 * 60 * 60 * 1000) {
 				if (callResult == Const.CALL_RESULT_1 || callResult == Const.CALL_RESULT_2
 						|| callResult == Const.CALL_RESULT_3 || callResult == Const.CALL_RESULT_4
 						|| callResult == Const.CALL_RESULT_6) {

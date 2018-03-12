@@ -1,7 +1,6 @@
 package cn.drizzt.thread;
 
-import java.util.Random;
-
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +11,8 @@ import cn.drizzt.util.ShUtil;
 
 @Component
 public class AuthDispatcher implements Runnable {
+	
+	private static Logger LOGGER = Logger.getLogger(AuthDispatcher.class);
 
 	@Autowired
 	private AuthResource authResource;
@@ -51,17 +52,22 @@ public class AuthDispatcher implements Runnable {
 				// System.out.println("错误信息：" + ShUtil.INSTANCE.SsmGetLastErrMsgA());
 				// }
 
-				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x0408, 0xffff);
-				System.out.println("空闲通道：" + ch);
+//				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x0408, 0xffff);
+//				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x0100, 0x0000);
+				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x1100, 0x770000);
+				LOGGER.info("空闲通道：" + ch);
 				if (ch != -1) {
-					String called = getCalled();
-					waitAuth.setCalled(called);
+//					String called = getCalled();
+//					waitAuth.setCalled(called);
 					waitAuth.setCh(ch);
 					waitAuth.setCallResult(Const.CALL_RESULT_99);
 					signalAuthService.update(waitAuth);
-					ShUtil.INSTANCE.SsmSetTxCallerId(ch, called);
-					ShUtil.INSTANCE.SsmAutoDial(ch, waitAuth.getCalling());
+//					ShUtil.INSTANCE.SsmSetTxCallerId(ch, called);
+//					ShUtil.INSTANCE.SsmSipSetTxUserName(ch, called);
+					ShUtil.INSTANCE.SsmAutoDial(ch, waitAuth.getCalling()+"@114.113.144.248:5060");
 					authResource.addAuth(waitAuth);
+				}else {
+					LOGGER.info("失败原因：" + ShUtil.INSTANCE.SsmGetLastErrMsgA());
 				}
 
 			}
@@ -73,10 +79,10 @@ public class AuthDispatcher implements Runnable {
 		}
 	}
 
-	private String getCalled() {
-		int i = Const.CODE_POOL.length;
-		Random random = new Random();
-		return Const.CODE_POOL[random.nextInt(i)];
-	}
+//	private String getCalled() {
+//		int i = Const.CODE_POOL.length;
+//		Random random = new Random();
+//		return Const.CODE_POOL[random.nextInt(i)];
+//	}
 
 }

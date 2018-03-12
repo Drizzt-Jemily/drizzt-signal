@@ -57,7 +57,7 @@ public class AuthController {
 		ModelAndView result = new ModelAndView("waiting");
 		String id = "";
 		if (pwd.equals("zxcasd2018")) {
-			Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
+			Pattern pattern = Pattern.compile("[1][3456789]\\d{9}");
 			Matcher callingPattern = pattern.matcher(calling);
 			if (callingPattern.matches()) {
 				SignalAuth signalAuth = new SignalAuth();
@@ -103,7 +103,7 @@ public class AuthController {
 		List<Integer> is = new ArrayList<Integer>();
 		if (pwd.equals("zxcasd2018")) {
 			if (file.getContentType().equals("text/plain")) {
-				Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
+				Pattern pattern = Pattern.compile("[1][3456789]\\d{9}");
 				BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()));
 				String calling = null;
 				String id = "";
@@ -173,12 +173,12 @@ public class AuthController {
 		ApiResponse apiResponse = new ApiResponse();
 		int i = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 		int j = Calendar.getInstance().get(Calendar.MINUTE);
-		if (i < 7 || i > 23) {
+		if (i < 7 || i > 22) {
 			apiResponse.setCode(-93);
 			apiResponse.setMsg("不在呼叫时段内");
-		} else if (i == 7 && j < 30) {
-			apiResponse.setCode(-93);
-			apiResponse.setMsg("不在呼叫时段内");
+//		} else if (i == 7 && j < 30) {
+//			apiResponse.setCode(-93);
+//			apiResponse.setMsg("不在呼叫时段内");
 		} else if (i == 22 && j > 30) {
 			apiResponse.setCode(-93);
 			apiResponse.setMsg("不在呼叫时段内");
@@ -189,7 +189,7 @@ public class AuthController {
 				apiResponse.setMsg("未授权");
 			} else {
 				if (signalUser.getNumber() > 0) {
-					Pattern pattern = Pattern.compile("[1][34578]\\d{9}");
+					Pattern pattern = Pattern.compile("[1][3456789]\\d{9}");
 					Matcher callingPattern = pattern.matcher(calling);
 					if (callingPattern.matches()) {
 						SignalAuth lastCalling = signalAuthService.getByLastCalling(calling);

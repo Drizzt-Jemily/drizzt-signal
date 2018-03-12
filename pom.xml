@@ -4,10 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- mvn clean package -Dmaven.test.skip=true -->
+	<!-- nohup java -jar -Xmx2000m -Xms2000m -Xmn1500m -Xss256k java -XX:ErrorFile=/home/drizzt/signal/java_error_%p.log  /home/drizzt/signal/drizzt-signal-1.7.1.jar & -->
 
 	<groupId>cn.drizzt</groupId>
 	<artifactId>drizzt-signal</artifactId>
-	<version>1.6.1</version>
+	<version>1.7.1</version>
 	<packaging>jar</packaging>
 
 	<name>drizzt-signal</name>

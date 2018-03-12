@@ -183,7 +183,7 @@ public class DialDispatcher implements Runnable {
 
 				if (b) { // 呼叫超时，暂时按正常处理
 					// chManager.setCallResult(Const.CALL_RESULT_98);
-					signalAuth.setCallResult(Const.CALL_RESULT_1);
+					signalAuth.setCallResult(Const.CALL_RESULT_97);
 				}
 
 				// 如果结果未变化，进行语音识别
