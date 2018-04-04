@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import cn.drizzt.entity.SignalAuth;
@@ -31,6 +32,9 @@ public class AuthResource {
 	
 	private ConcurrentLinkedQueue<SignalAuth> authQueue = new ConcurrentLinkedQueue<SignalAuth>();
 
+	@Value("${calling.ip}")  
+    private String callingIp;
+	
 	public void init() throws Exception {
 		int i = ShUtil.INSTANCE.SsmStartCti(Const.CTI_INI_PATH + "ShConfig.ini", Const.CTI_INI_PATH + "ShIndex.ini");
 		if (i == 0) {
@@ -105,6 +109,11 @@ public class AuthResource {
 		} else {
 			LOGGER.info("板卡启动失败:" + ShUtil.INSTANCE.SsmGetLastErrMsgA());
 		}
+	}
+	
+
+	public String getCallingIp() {
+		return callingIp;
 	}
 
 	public Map<String, Integer> getTransTable() {

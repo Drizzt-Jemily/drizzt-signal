@@ -64,7 +64,7 @@ public class AuthDispatcher implements Runnable {
 					signalAuthService.update(waitAuth);
 //					ShUtil.INSTANCE.SsmSetTxCallerId(ch, called);
 //					ShUtil.INSTANCE.SsmSipSetTxUserName(ch, called);
-					ShUtil.INSTANCE.SsmAutoDial(ch, waitAuth.getCalling()+"@114.113.144.248:5060");
+					ShUtil.INSTANCE.SsmAutoDial(ch, waitAuth.getCalling()+authResource.getCallingIp());
 					authResource.addAuth(waitAuth);
 				}else {
 					LOGGER.info("失败原因：" + ShUtil.INSTANCE.SsmGetLastErrMsgA());

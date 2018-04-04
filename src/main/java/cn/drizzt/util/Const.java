@@ -5,7 +5,8 @@ public class Const {
 	public static final boolean DEBUG = false; // 控制文件删除
 
 	public static final String CTI_SO_PATH = "/usr/local/lib/shcti/ver5.4.20/out/libshpa3.so.5.4.20";
-	public static final String CTI_INI_PATH = "/home/longtel/CtiLinux5.4.20-2.6.32-504.el6.x86_64-SMP-x86_64/tools/";
+//	public static final String CTI_INI_PATH = "/home/longtel/CtiLinux5.4.20-2.6.32-504.el6.x86_64-SMP-x86_64/tools/";
+	public static final String CTI_INI_PATH = "/home/drizzt/signal/";
 	public static final String CTI_VOICE_PATH = "/home/drizzt/signal/voice";
 	// public static final String CTI_VOICE_PATH = "C:/workspace";
 
