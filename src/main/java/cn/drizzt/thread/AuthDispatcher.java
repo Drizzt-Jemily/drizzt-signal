@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import cn.drizzt.entity.SignalAuth;
 import cn.drizzt.service.SignalAuthService;
+import cn.drizzt.service.SignalMobileService;
 import cn.drizzt.util.Const;
 import cn.drizzt.util.ShUtil;
 
@@ -19,6 +20,9 @@ public class AuthDispatcher implements Runnable {
 
 	@Autowired
 	private SignalAuthService signalAuthService;
+	
+	@Autowired
+	private SignalMobileService signalMobileService;
 
 	public void run() {
 		while (true) {
@@ -64,7 +68,8 @@ public class AuthDispatcher implements Runnable {
 					signalAuthService.update(waitAuth);
 //					ShUtil.INSTANCE.SsmSetTxCallerId(ch, called);
 //					ShUtil.INSTANCE.SsmSipSetTxUserName(ch, called);
-					ShUtil.INSTANCE.SsmAutoDial(ch, waitAuth.getCalling()+authResource.getCallingIp());
+					String calling = signalMobileService.convertCalling(waitAuth.getCalling(), Const.AREA_CODE);
+					ShUtil.INSTANCE.SsmAutoDial(ch, calling+authResource.getCallingIp());
 					authResource.addAuth(waitAuth);
 				}else {
 					LOGGER.info("失败原因：" + ShUtil.INSTANCE.SsmGetLastErrMsgA());

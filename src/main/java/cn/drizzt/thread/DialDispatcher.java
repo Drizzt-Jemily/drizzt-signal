@@ -38,24 +38,25 @@ public class DialDispatcher implements Runnable {
 
 	public void run() {
 		while (true) {
-//			Map<Integer, ChManager> chManagerPool = authResource.getChManagerPool();
-//			Set<Integer> keySet = chManagerPool.keySet();
-//			for (Integer key : keySet) {
-//				ChManager chManager = chManagerPool.get(key);
-//				LOGGER.debug("判断通道：" + key + "，使用状态：" + chManager.isUseStatus() + "，呼叫状态：" + chManager.isCallStatus());
-//				if (chManager.isUseStatus() && !chManager.isCallStatus()) {
-//					chManager.setCallStatus(true);
-//					Worker worker = new Worker(chManager);
-//					dialExecutor.execute(worker);
-//				}
-//			}
-			
+			// Map<Integer, ChManager> chManagerPool = authResource.getChManagerPool();
+			// Set<Integer> keySet = chManagerPool.keySet();
+			// for (Integer key : keySet) {
+			// ChManager chManager = chManagerPool.get(key);
+			// LOGGER.debug("判断通道：" + key + "，使用状态：" + chManager.isUseStatus() + "，呼叫状态：" +
+			// chManager.isCallStatus());
+			// if (chManager.isUseStatus() && !chManager.isCallStatus()) {
+			// chManager.setCallStatus(true);
+			// Worker worker = new Worker(chManager);
+			// dialExecutor.execute(worker);
+			// }
+			// }
+
 			SignalAuth signalAuth = authResource.getAuth();
-			if(null!=signalAuth) {
+			if (null != signalAuth) {
 				Worker worker = new Worker(signalAuth);
 				dialExecutor.execute(worker);
 			}
-			
+
 			try {
 				Thread.sleep(Const.DISPATCHER_SLEEPTIME);
 			} catch (InterruptedException e) {
@@ -236,10 +237,10 @@ public class DialDispatcher implements Runnable {
 				}
 
 				// 去掉外地号码加拨的0
-				String calling = signalAuth.getCalling();
-				if (calling.startsWith("0")) {
-					signalAuth.setCalling(calling.substring(1, calling.length()));
-				}
+				// String calling = signalAuth.getCalling();
+				// if (calling.startsWith("0")) {
+				// signalAuth.setCalling(calling.substring(1, calling.length()));
+				// }
 
 				signalAuthService.update(signalAuth);
 
@@ -269,18 +270,19 @@ public class DialDispatcher implements Runnable {
 				// }
 
 				// 属性拷贝并保存数据库
-//				SignalAuth signalAuth = new SignalAuth();
-				try {
+				// SignalAuth signalAuth = new SignalAuth();
+				// try {
+				//
+				// // 去掉外地号码加拨的0
+				// String calling = signalAuth.getCalling();
+				// if (calling.startsWith("0")) {
+				// signalAuth.setCalling(calling.substring(1, calling.length()));
+				// }
+				//
+				// } catch (Exception e1) {
+				// e1.printStackTrace();
+				// }
 
-					// 去掉外地号码加拨的0
-					String calling = signalAuth.getCalling();
-					if (calling.startsWith("0")) {
-						signalAuth.setCalling(calling.substring(1, calling.length()));
-					}
-
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
 				signalAuth.setCallResult(Const.CALL_RESULT_97);
 				signalAuthService.update(signalAuth);
 
@@ -288,27 +290,27 @@ public class DialDispatcher implements Runnable {
 
 				// 关闭线路
 				ShUtil.INSTANCE.SsmHangup(signalAuth.getCh());
-//				signalAuth.setHangup(true);
+				// signalAuth.setHangup(true);
 
-//				int i = ShUtil.INSTANCE.SsmGetChState(chManager.getCh());
-//
-//				while (i != 0) {
-//					try {
-//						Thread.sleep(100);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//					i = ShUtil.INSTANCE.SsmGetChState(chManager.getCh());
-//				}
-//
-//				// 增加500毫秒释放通道时间
-//				try {
-//					Thread.sleep(500);
-//				} catch (InterruptedException e) {
-//					LOGGER.error(ExceptionConstans.getTrace(e));
-//				}
-//				// 重置线路
-//				authResource.resetChManager(chManager.getCh());
+				// int i = ShUtil.INSTANCE.SsmGetChState(chManager.getCh());
+				//
+				// while (i != 0) {
+				// try {
+				// Thread.sleep(100);
+				// } catch (InterruptedException e) {
+				// e.printStackTrace();
+				// }
+				// i = ShUtil.INSTANCE.SsmGetChState(chManager.getCh());
+				// }
+				//
+				// // 增加500毫秒释放通道时间
+				// try {
+				// Thread.sleep(500);
+				// } catch (InterruptedException e) {
+				// LOGGER.error(ExceptionConstans.getTrace(e));
+				// }
+				// // 重置线路
+				// authResource.resetChManager(chManager.getCh());
 			}
 		}
 	}

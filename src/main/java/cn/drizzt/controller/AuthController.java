@@ -29,7 +29,6 @@ import cn.drizzt.model.ApiResult;
 import cn.drizzt.model.BatchResponse;
 import cn.drizzt.service.SignalAuthService;
 import cn.drizzt.service.SignalBatchService;
-import cn.drizzt.service.SignalMobileService;
 import cn.drizzt.service.SignalUserService;
 import cn.drizzt.util.CallResultCH;
 import cn.drizzt.util.Const;
@@ -42,8 +41,8 @@ public class AuthController {
 	@Autowired
 	private SignalAuthService signalAuthService;
 
-	@Autowired
-	private SignalMobileService signalMobileService;
+	// @Autowired
+	// private SignalMobileService signalMobileService;
 
 	@Autowired
 	private SignalBatchService signalBatchService;
@@ -63,7 +62,7 @@ public class AuthController {
 				SignalAuth signalAuth = new SignalAuth();
 				id = Numbers.uuid();
 				signalAuth.setId(id);
-				calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
+//				calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
 				signalAuth.setCalling(calling);
 				signalAuth.setStartTime(System.currentTimeMillis());
 				signalAuth.setCallResult(Const.CALL_RESULT_0);
@@ -123,7 +122,7 @@ public class AuthController {
 					} else {
 						id = Numbers.uuid();
 						signalAuth.setId(id);
-						calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
+						// calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
 						signalAuth.setCalling(calling);
 						signalAuth.setStartTime(System.currentTimeMillis());
 						signalAuth.setCallResult(Const.CALL_RESULT_0);
@@ -216,7 +215,7 @@ public class AuthController {
 								SignalAuth signalAuth = new SignalAuth();
 								String authId = Numbers.uuid();
 								signalAuth.setId(authId);
-								calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
+//								calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
 								signalAuth.setCalling(calling);
 								signalAuth.setStartTime(System.currentTimeMillis());
 								signalAuth.setCallResult(Const.CALL_RESULT_0);
