@@ -58,7 +58,7 @@ public class AuthDispatcher implements Runnable {
 
 //				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x0408, 0xffff);
 //				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x0100, 0x0000);
-				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x1100, 0x770000);
+				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x1100, 0x3b0000);
 				LOGGER.info("空闲通道：" + ch);
 				if (ch != -1) {
 //					String called = getCalled();

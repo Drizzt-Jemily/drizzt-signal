@@ -3,7 +3,7 @@ package cn.drizzt.controller;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Calendar;
+//import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -62,7 +62,7 @@ public class AuthController {
 				SignalAuth signalAuth = new SignalAuth();
 				id = Numbers.uuid();
 				signalAuth.setId(id);
-//				calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
+				// calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
 				signalAuth.setCalling(calling);
 				signalAuth.setStartTime(System.currentTimeMillis());
 				signalAuth.setCallResult(Const.CALL_RESULT_0);
@@ -170,75 +170,72 @@ public class AuthController {
 	public Object api(HttpServletRequest request, @PathVariable("id") String id,
 			@PathVariable("calling") String calling) throws Exception {
 		ApiResponse apiResponse = new ApiResponse();
-		int i = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-		int j = Calendar.getInstance().get(Calendar.MINUTE);
-		if (i < 7 || i > 22) {
-			apiResponse.setCode(-93);
-			apiResponse.setMsg("不在呼叫时段内");
-//		} else if (i == 7 && j < 30) {
-//			apiResponse.setCode(-93);
-//			apiResponse.setMsg("不在呼叫时段内");
-		} else if (i == 22 && j > 30) {
-			apiResponse.setCode(-93);
-			apiResponse.setMsg("不在呼叫时段内");
+		// int i = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+		// int j = Calendar.getInstance().get(Calendar.MINUTE);
+		// if (i < 7 || i > 22) {
+		// apiResponse.setCode(-93);
+		// apiResponse.setMsg("不在呼叫时段内");
+		// } else if (i == 22 && j > 30) {
+		// apiResponse.setCode(-93);
+		// apiResponse.setMsg("不在呼叫时段内");
+		// } else {
+		SignalUser signalUser = signalUserService.getById(id);
+		if (null == signalUser) {
+			apiResponse.setCode(-99);
+			apiResponse.setMsg("未授权");
 		} else {
-			SignalUser signalUser = signalUserService.getById(id);
-			if (null == signalUser) {
-				apiResponse.setCode(-99);
-				apiResponse.setMsg("未授权");
-			} else {
-				if (signalUser.getNumber() > 0) {
-					Pattern pattern = Pattern.compile("[1][3456789]\\d{9}");
-					Matcher callingPattern = pattern.matcher(calling);
-					if (callingPattern.matches()) {
-						SignalAuth lastCalling = signalAuthService.getByLastCalling(calling);
-						if (null != lastCalling) {
-							Integer callResult = lastCalling.getCallResult();
-							if (callResult == 0 || callResult == 99) {
-								apiResponse.setCode(-94);
-								apiResponse.setMsg("该号码正在验证中，请稍后");
-							} else {
-								SignalAuth signalAuth = new SignalAuth();
-								String authId = Numbers.uuid();
-								signalAuth.setId(authId);
-								signalAuth.setCalling(calling);
-								signalAuth.setStartTime(System.currentTimeMillis());
-								signalAuth.setCallResult(lastCalling.getCallResult());
-								signalAuth.setUserId(id);
-								signalUserService.reduceNumber(id);
-								signalAuthService.add(signalAuth);
-								apiResponse.setCode(0);
-								apiResponse.setMsg(authId);
-							}
+			if (signalUser.getNumber() > 0) {
+				Pattern pattern = Pattern.compile("[1][3456789]\\d{9}");
+				Matcher callingPattern = pattern.matcher(calling);
+				if (callingPattern.matches()) {
+					SignalAuth lastCalling = signalAuthService.getByLastCalling(calling);
+					if (null != lastCalling) {
+						Integer callResult = lastCalling.getCallResult();
+						if (callResult == 0 || callResult == 99) {
+							apiResponse.setCode(-94);
+							apiResponse.setMsg("该号码正在验证中，请稍后");
 						} else {
-							if (signalAuthService.getWaitAuthNum() < Const.CARD_NUMBER) {
-								SignalAuth signalAuth = new SignalAuth();
-								String authId = Numbers.uuid();
-								signalAuth.setId(authId);
-//								calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
-								signalAuth.setCalling(calling);
-								signalAuth.setStartTime(System.currentTimeMillis());
-								signalAuth.setCallResult(Const.CALL_RESULT_0);
-								signalAuth.setUserId(id);
-								signalUserService.reduceNumber(id);
-								signalAuthService.add(signalAuth);
-								apiResponse.setCode(0);
-								apiResponse.setMsg(authId);
-							} else {
-								apiResponse.setCode(-96);
-								apiResponse.setMsg("线路忙，请稍后");
-							}
+							SignalAuth signalAuth = new SignalAuth();
+							String authId = Numbers.uuid();
+							signalAuth.setId(authId);
+							signalAuth.setCalling(calling);
+							signalAuth.setStartTime(System.currentTimeMillis());
+							signalAuth.setCallResult(lastCalling.getCallResult());
+							signalAuth.setUserId(id);
+							signalUserService.reduceNumber(id);
+							signalAuthService.add(signalAuth);
+							apiResponse.setCode(0);
+							apiResponse.setMsg(authId);
 						}
 					} else {
-						apiResponse.setCode(-98);
-						apiResponse.setMsg("号码格式不正确");
+						if (signalAuthService.getWaitAuthNum() < Const.CARD_NUMBER) {
+							SignalAuth signalAuth = new SignalAuth();
+							String authId = Numbers.uuid();
+							signalAuth.setId(authId);
+							// calling = signalMobileService.convertCalling(calling, Const.AREA_CODE);
+							signalAuth.setCalling(calling);
+							signalAuth.setStartTime(System.currentTimeMillis());
+							signalAuth.setCallResult(Const.CALL_RESULT_0);
+							signalAuth.setUserId(id);
+							signalUserService.reduceNumber(id);
+							signalAuthService.add(signalAuth);
+							apiResponse.setCode(0);
+							apiResponse.setMsg(authId);
+						} else {
+							apiResponse.setCode(-96);
+							apiResponse.setMsg("线路忙，请稍后");
+						}
 					}
 				} else {
-					apiResponse.setCode(-97);
-					apiResponse.setMsg("余额不足");
+					apiResponse.setCode(-98);
+					apiResponse.setMsg("号码格式不正确");
 				}
+			} else {
+				apiResponse.setCode(-97);
+				apiResponse.setMsg("余额不足");
 			}
 		}
+		// }
 		return apiResponse;
 	}
 
