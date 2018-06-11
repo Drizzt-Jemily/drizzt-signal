@@ -13,11 +13,11 @@ public class CallResultCH {
 		} else if (callResult == Const.CALL_RESULT_97) {
 			cr = "呼叫失败";
 		} else if (callResult == Const.CALL_RESULT_1) {
-			cr = "正常号码";
+			cr = "振铃";
 		} else if (callResult == Const.CALL_RESULT_2) {
-			cr = "被接听";
+			cr = "接听";
 		} else if (callResult == Const.CALL_RESULT_3) {
-			cr = "暂时无法接听";
+			cr = "暂时无法接通";
 		} else if (callResult == Const.CALL_RESULT_4) {
 			cr = "呼叫限制";
 		} else if (callResult == Const.CALL_RESULT_5) {
