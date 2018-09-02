@@ -59,27 +59,26 @@ public class AuthResource {
 //				}
 //			}
 
+			transTable.put("空号", Const.CALL_RESULT_6);
+			transTable.put("不存在", Const.CALL_RESULT_6);
+			transTable.put("不再使用", Const.CALL_RESULT_6);
+			transTable.put("不在使用", Const.CALL_RESULT_6);
+			transTable.put("语音通话", Const.CALL_RESULT_6);
+			transTable.put("欠费", Const.CALL_RESULT_7);
+			transTable.put("停机", Const.CALL_RESULT_7);
+			transTable.put("暂停", Const.CALL_RESULT_7);
 			transTable.put("通话中", Const.CALL_RESULT_3);
 			transTable.put("无法接通", Const.CALL_RESULT_3);
 			transTable.put("无法接听", Const.CALL_RESULT_3);
 			transTable.put("不要挂机", Const.CALL_RESULT_3);
 			transTable.put("用户忙", Const.CALL_RESULT_3);
 			transTable.put("不方便", Const.CALL_RESULT_3);
-			transTable.put("稍后", Const.CALL_RESULT_3);
-			transTable.put("再拨", Const.CALL_RESULT_3);
 			transTable.put("限制", Const.CALL_RESULT_4);
 			transTable.put("设置", Const.CALL_RESULT_4);
 			transTable.put("未开通", Const.CALL_RESULT_4);
 			transTable.put("语音服务", Const.CALL_RESULT_4);
 			transTable.put("关机", Const.CALL_RESULT_5);
 			transTable.put("已关", Const.CALL_RESULT_5);
-			transTable.put("空号", Const.CALL_RESULT_6);
-			transTable.put("不存在", Const.CALL_RESULT_6);
-			transTable.put("不再使用", Const.CALL_RESULT_6);
-			transTable.put("语音通话", Const.CALL_RESULT_6);
-			transTable.put("欠费", Const.CALL_RESULT_7);
-			transTable.put("停机", Const.CALL_RESULT_7);
-			transTable.put("暂停", Const.CALL_RESULT_7);
 			transTable.put("提醒", Const.CALL_RESULT_8);
 			transTable.put("提示", Const.CALL_RESULT_8);
 			transTable.put("秘书", Const.CALL_RESULT_8);
