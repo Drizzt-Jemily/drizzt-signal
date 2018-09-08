@@ -73,14 +73,14 @@ public class SignalAuthService {
 			Integer callResult = signalAuth.getCallResult();
 			if (callResult == 0 || callResult == 99) {
 				return signalAuth;
-			} else if (System.currentTimeMillis() - startTime < 4 * 60 * 60 * 1000) {
+			} else if (System.currentTimeMillis() - startTime < 30 * 60 * 1000) {
 				if (callResult == Const.CALL_RESULT_5 || callResult == Const.CALL_RESULT_7
 						|| callResult == Const.CALL_RESULT_8) {
 					return signalAuth;
 				} else {
 					return null;
 				}
-			} else if (System.currentTimeMillis() - startTime < 4 * 60 * 60 * 1000) {
+			} else if (System.currentTimeMillis() - startTime < 30 * 60 * 1000) {
 				if (callResult == Const.CALL_RESULT_1 || callResult == Const.CALL_RESULT_2
 						|| callResult == Const.CALL_RESULT_3 || callResult == Const.CALL_RESULT_4
 						|| callResult == Const.CALL_RESULT_6) {
