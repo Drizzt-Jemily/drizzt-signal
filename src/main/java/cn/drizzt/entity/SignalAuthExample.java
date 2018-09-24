@@ -1089,6 +1089,66 @@ public class SignalAuthExample {
             addCriterion("user_id not between", value1, value2, "userId");
             return (Criteria) this;
         }
+
+        public Criteria andTimeLimitedIsNull() {
+            addCriterion("time_limited is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedIsNotNull() {
+            addCriterion("time_limited is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedEqualTo(Integer value) {
+            addCriterion("time_limited =", value, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedNotEqualTo(Integer value) {
+            addCriterion("time_limited <>", value, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedGreaterThan(Integer value) {
+            addCriterion("time_limited >", value, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedGreaterThanOrEqualTo(Integer value) {
+            addCriterion("time_limited >=", value, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedLessThan(Integer value) {
+            addCriterion("time_limited <", value, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedLessThanOrEqualTo(Integer value) {
+            addCriterion("time_limited <=", value, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedIn(List<Integer> values) {
+            addCriterion("time_limited in", values, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedNotIn(List<Integer> values) {
+            addCriterion("time_limited not in", values, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedBetween(Integer value1, Integer value2) {
+            addCriterion("time_limited between", value1, value2, "timeLimited");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimeLimitedNotBetween(Integer value1, Integer value2) {
+            addCriterion("time_limited not between", value1, value2, "timeLimited");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -17,6 +17,7 @@
     <result column="record_status" property="recordStatus" jdbcType="INTEGER" />
     <result column="call_result" property="callResult" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="time_limited" property="timeLimited" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List" >
     id, batch_id, ch, called, calling, duration, voice_duration, start_time, start_record_dur, 
-    translation, auto_dial, tone_analyze, record_status, call_result, user_id
+    translation, auto_dial, tone_analyze, record_status, call_result, user_id, time_limited
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="cn.drizzt.entity.SignalAuthExample" >
     select
@@ -115,14 +116,14 @@
       called, calling, duration, 
       voice_duration, start_time, start_record_dur, 
       translation, auto_dial, tone_analyze, 
-      record_status, call_result, user_id
-      )
+      record_status, call_result, user_id, 
+      time_limited)
     values (#{id,jdbcType=VARCHAR}, #{batchId,jdbcType=VARCHAR}, #{ch,jdbcType=INTEGER}, 
       #{called,jdbcType=VARCHAR}, #{calling,jdbcType=VARCHAR}, #{duration,jdbcType=BIGINT}, 
       #{voiceDuration,jdbcType=BIGINT}, #{startTime,jdbcType=BIGINT}, #{startRecordDur,jdbcType=BIGINT}, 
       #{translation,jdbcType=VARCHAR}, #{autoDial,jdbcType=INTEGER}, #{toneAnalyze,jdbcType=INTEGER}, 
-      #{recordStatus,jdbcType=INTEGER}, #{callResult,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}
-      )
+      #{recordStatus,jdbcType=INTEGER}, #{callResult,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, 
+      #{timeLimited,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="cn.drizzt.entity.SignalAuth" >
     insert into signal_auth
@@ -172,6 +173,9 @@
       <if test="userId != null" >
         user_id,
       </if>
+      <if test="timeLimited != null" >
+        time_limited,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -218,6 +222,9 @@
       </if>
       <if test="userId != null" >
         #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="timeLimited != null" >
+        #{timeLimited,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -275,6 +282,9 @@
       <if test="record.userId != null" >
         user_id = #{record.userId,jdbcType=VARCHAR},
       </if>
+      <if test="record.timeLimited != null" >
+        time_limited = #{record.timeLimited,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -296,7 +306,8 @@
       tone_analyze = #{record.toneAnalyze,jdbcType=INTEGER},
       record_status = #{record.recordStatus,jdbcType=INTEGER},
       call_result = #{record.callResult,jdbcType=INTEGER},
-      user_id = #{record.userId,jdbcType=VARCHAR}
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      time_limited = #{record.timeLimited,jdbcType=INTEGER}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -346,6 +357,9 @@
       <if test="userId != null" >
         user_id = #{userId,jdbcType=VARCHAR},
       </if>
+      <if test="timeLimited != null" >
+        time_limited = #{timeLimited,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
@@ -364,7 +378,8 @@
       tone_analyze = #{toneAnalyze,jdbcType=INTEGER},
       record_status = #{recordStatus,jdbcType=INTEGER},
       call_result = #{callResult,jdbcType=INTEGER},
-      user_id = #{userId,jdbcType=VARCHAR}
+      user_id = #{userId,jdbcType=VARCHAR},
+      time_limited = #{timeLimited,jdbcType=INTEGER}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectPage" resultMap="BaseResultMap" parameterType="cn.drizzt.entity.SignalAuthExample" >

@@ -19,7 +19,7 @@
 		</commentGenerator>
 
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://121.79.134.142:3306/drizzt" userId="root"
+			connectionURL="jdbc:mysql://222.169.86.25:3306/drizzt" userId="root"
 			password="drizzt">
 		</jdbcConnection>
 

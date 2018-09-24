@@ -31,6 +31,8 @@ public class SignalAuth {
 
     private String userId;
 
+    private Integer timeLimited;
+
     public String getId() {
         return id;
     }
@@ -149,5 +151,13 @@ public class SignalAuth {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Integer getTimeLimited() {
+        return timeLimited;
+    }
+
+    public void setTimeLimited(Integer timeLimited) {
+        this.timeLimited = timeLimited;
     }
 }

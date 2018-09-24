@@ -18,7 +18,7 @@ public interface ShUtil extends Library {
 	public int SsmGetChState(int ch);
 
 	public int SsmSetTxCallerId(int ch, String phNum);
-	
+
 	public int SsmSipSetTxUserName(int ch, String phNum);
 
 	public int SsmAutoDial(int ch, String phNum);
@@ -38,5 +38,9 @@ public interface ShUtil extends Library {
 	public int SsmDetectBargeIn(int ch);
 
 	public int SsmSearchIdleCallOutCh(int wSearchMode, int dwPrecedence);
+
+	public int SsmCloseToneAnalyze(int ch);
+
+	public int SsmStartToneAnalyze(int ch);
 
 }
