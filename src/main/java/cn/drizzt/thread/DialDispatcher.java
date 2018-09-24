@@ -92,8 +92,7 @@ public class DialDispatcher implements Runnable {
 				signalAuth.setAutoDial(0);
 				signalAuth.setToneAnalyze(0);
 				signalAuth.setRecordStatus(0);
-				long dailStart = System.currentTimeMillis();
-				signalAuth.setStartTime(dailStart);
+				signalAuth.setStartTime(System.currentTimeMillis());
 				int i = 0;
 				boolean b = true; // 循环控制器
 
@@ -134,21 +133,12 @@ public class DialDispatcher implements Runnable {
 
 					// toneAnalyze判断逻辑
 					if (ssmGetToneAnalyzeResult == 3) {
-						if (System.currentTimeMillis() - dailStart < 3500) {
-							LOGGER.warn("被叫号：" + signalAuth.getCalling() + ",toneAnalyze=3出现早发响铃！！！");
-							signalAuth.setTimeLimited(1);
-							ShUtil.INSTANCE.SsmCloseToneAnalyze(ch);
-							ShUtil.INSTANCE.SsmStartToneAnalyze(ch);
-							Thread.sleep(3000);
-							continue;
-						} else {
-							if (toneAnalyze == 0) {
-								signalAuth.setToneAnalyze(ssmGetToneAnalyzeResult);
-							}
-							// ShUtil.INSTANCE.SsmHangup(ch);
-							b = false;
-							signalAuth.setCallResult(Const.CALL_RESULT_1);
+						if (toneAnalyze == 0) {
+							signalAuth.setToneAnalyze(ssmGetToneAnalyzeResult);
 						}
+						// ShUtil.INSTANCE.SsmHangup(ch);
+						b = false;
+						signalAuth.setCallResult(Const.CALL_RESULT_1);
 					} else if (ssmGetToneAnalyzeResult == 6) {
 						if (toneAnalyze == 0) {
 							signalAuth.setToneAnalyze(ssmGetToneAnalyzeResult);
@@ -177,17 +167,11 @@ public class DialDispatcher implements Runnable {
 						}
 					} else if (ssmChkAutoDial == 7) {
 						if (autoDial != 7) {
-							signalAuth.setAutoDial(7);
+							signalAuth.setAutoDial(ssmChkAutoDial);
 						}
 						// ShUtil.INSTANCE.SsmHangup(ch);
 						b = false;
-						if (System.currentTimeMillis() - dailStart < 3500) {
-							LOGGER.warn("被叫号：" + signalAuth.getCalling() + ",autoDial=7出现早发响铃！！！");
-							signalAuth.setTimeLimited(1);
-							signalAuth.setCallResult(Const.CALL_RESULT_6);
-						} else {
-							signalAuth.setCallResult(Const.CALL_RESULT_2);
-						}
+						signalAuth.setCallResult(Const.CALL_RESULT_2);
 					} else if (ssmChkAutoDial == 11) {
 						if (autoDial != 11) {
 							signalAuth.setAutoDial(ssmChkAutoDial);
@@ -225,7 +209,6 @@ public class DialDispatcher implements Runnable {
 						Long end = System.currentTimeMillis();
 						signalAuth.setVoiceDuration(end - start);
 
-						// if (end - start < 5) {
 						if (translation.equals("") || translation.length() == 0) {
 							signalAuth.setCallResult(Const.CALL_RESULT_97);
 						} else {
