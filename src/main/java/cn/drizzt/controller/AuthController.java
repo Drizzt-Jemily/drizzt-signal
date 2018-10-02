@@ -89,7 +89,7 @@ public class AuthController {
 
 		// 暂时解决正在呼叫问题
 		if (callResult == 99 && System.currentTimeMillis() - signalAuth.getStartTime() > Const.CHMANAGER_TIMEOUT) {
-			callResult = 98;
+			callResult = Const.CALL_RESULT_1;
 		}
 
 		String cr = CallResultCH.getCH(callResult);
@@ -157,7 +157,7 @@ public class AuthController {
 
 			// 暂时解决正在呼叫问题
 			if (callResult == 99 && System.currentTimeMillis() - signalAuth.getStartTime() > Const.CHMANAGER_TIMEOUT) {
-				callResult = 98;
+				callResult = Const.CALL_RESULT_1;
 			}
 
 			batchResponse.setCallResult(CallResultCH.getCH(callResult));
@@ -264,7 +264,7 @@ public class AuthController {
 				// 暂时解决正在呼叫问题
 				if (callResult == 99) {
 					if (System.currentTimeMillis() - signalAuth.getStartTime() > Const.CHMANAGER_TIMEOUT) {
-						callResult = Const.CALL_RESULT_98;
+						callResult = Const.CALL_RESULT_1;
 					} else {
 						callResult = Const.CALL_RESULT_0;
 					}

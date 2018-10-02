@@ -146,9 +146,11 @@ public class DialDispatcher implements Runnable {
 					} else if (ssmGetToneAnalyzeResult == 2) {
 						if (toneAnalyze == 0) {
 							signalAuth.setToneAnalyze(ssmGetToneAnalyzeResult);
+						} else {
+							signalAuth.setToneAnalyze(toneAnalyze * 10 + ssmGetToneAnalyzeResult);
 						}
 						b = false;
-						signalAuth.setCallResult(Const.CALL_RESULT_4);
+						signalAuth.setCallResult(Const.CALL_RESULT_3);
 					}
 
 					// autoDial判断逻辑
