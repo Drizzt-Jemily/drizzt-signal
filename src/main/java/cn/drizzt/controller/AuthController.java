@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,8 @@ public class AuthController {
 
 	@Autowired
 	private SignalUserService signalUserService;
+	
+	private static Logger LOGGER = Logger.getLogger(AuthController.class);
 
 	@RequestMapping(value = "/one", method = RequestMethod.POST)
 	public ModelAndView one(@RequestParam(value = "calling", required = true) String calling,
@@ -169,6 +172,8 @@ public class AuthController {
 	@ResponseBody
 	public Object api(HttpServletRequest request, @PathVariable("id") String id,
 			@PathVariable("calling") String calling) throws Exception {
+		String remoteAddr = request.getRemoteAddr();
+		
 		ApiResponse apiResponse = new ApiResponse();
 		// int i = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 		// int j = Calendar.getInstance().get(Calendar.MINUTE);
@@ -180,6 +185,7 @@ public class AuthController {
 		// apiResponse.setMsg("不在呼叫时段内");
 		// } else {
 		SignalUser signalUser = signalUserService.getById(id);
+		int num = -99;
 		if (null == signalUser) {
 			apiResponse.setCode(-99);
 			apiResponse.setMsg("未授权");
@@ -208,7 +214,8 @@ public class AuthController {
 							apiResponse.setMsg(authId);
 						}
 					} else {
-						if (signalAuthService.getWaitAuthNum() < Const.CARD_NUMBER) {
+						num = signalAuthService.getWaitAuthNum();
+						if (num < Const.CARD_NUMBER) {
 							SignalAuth signalAuth = new SignalAuth();
 							String authId = Numbers.uuid();
 							signalAuth.setId(authId);
@@ -236,6 +243,7 @@ public class AuthController {
 			}
 		}
 		// }
+		LOGGER.info("账号:"+id+",calling:"+calling+",ip:"+remoteAddr+",待测试号码数量:"+num+",返回码:"+apiResponse.getCode());
 		return apiResponse;
 	}
 
