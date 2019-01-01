@@ -35,6 +35,9 @@ public class AuthResource {
 	@Value("${calling.ip}")  
     private String callingIp;
 	
+	@Value("${delete.file}")  
+    private boolean deleteFile;
+	
 	public void init() throws Exception {
 		int i = ShUtil.INSTANCE.SsmStartCti(Const.CTI_INI_PATH + "ShConfig.ini", Const.CTI_INI_PATH + "ShIndex.ini");
 		if (i == 0) {
@@ -117,6 +120,10 @@ public class AuthResource {
 
 	public String getCallingIp() {
 		return callingIp;
+	}
+	
+	public boolean getDeleteFile() {
+		return deleteFile;
 	}
 
 	public Map<String, Integer> getTransTable() {

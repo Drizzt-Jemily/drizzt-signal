@@ -150,7 +150,7 @@ public class DialDispatcher implements Runnable {
 							signalAuth.setToneAnalyze(toneAnalyze * 10 + ssmGetToneAnalyzeResult);
 						}
 						b = false;
-						signalAuth.setCallResult(Const.CALL_RESULT_3);
+						signalAuth.setCallResult(Const.CALL_RESULT_4);
 					}
 
 					// autoDial判断逻辑
@@ -211,9 +211,9 @@ public class DialDispatcher implements Runnable {
 						Long end = System.currentTimeMillis();
 						signalAuth.setVoiceDuration(end - start);
 
-						if (translation.equals("") || translation.length() == 0) {
-							signalAuth.setCallResult(Const.CALL_RESULT_97);
-						} else {
+//						if (translation.equals("") || translation.length() == 0) {
+//							signalAuth.setCallResult(Const.CALL_RESULT_97);
+//						} else {
 							Map<String, Integer> transTable = authResource.getTransTable();
 							for (Entry<String, Integer> entry : transTable.entrySet()) {
 								if (translation.contains(entry.getKey())) {
@@ -221,7 +221,7 @@ public class DialDispatcher implements Runnable {
 									break;
 								}
 							}
-						}
+//						}
 
 						if (signalAuth.getCallResult() == 99) {
 							signalAuth.setCallResult(Const.CALL_RESULT_1);
@@ -236,7 +236,7 @@ public class DialDispatcher implements Runnable {
 
 				// 删除录音文件
 				File pcmFile = new File(Const.CTI_VOICE_PATH + File.separator + signalAuth.getId() + ".wav");
-				if (pcmFile.exists() && !Const.DEBUG) {
+				if (pcmFile.exists() && authResource.getDeleteFile()) {
 					boolean d = pcmFile.delete();
 					if (!d) {
 						LOGGER.error("文件删除失败：" + signalAuth.getId() + ".wav");
