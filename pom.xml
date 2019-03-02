@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- mvn clean package -Dmaven.test.skip=true -->
-	<!-- nohup java -jar -Xmx2000m -Xms2000m -Xmn1500m -Xss256k -XX:ErrorFile=/home/drizzt/signal/java_error_%p.log  /home/drizzt/signal/drizzt-signal-1.8.5.jar & -->
+	<!-- nohup java -jar -Xmx2000m -Xms2000m -Xmn1500m -Xss256k -XX:ErrorFile=/home/drizzt/signal/java_error_%p.log  /home/drizzt/signal/drizzt-signal-1.8.6.jar & -->
 
 	<groupId>cn.drizzt</groupId>
 	<artifactId>drizzt-signal</artifactId>
-	<version>1.8.5</version>
+	<version>1.8.6</version>
 	<packaging>jar</packaging>
 
 	<name>drizzt-signal</name>

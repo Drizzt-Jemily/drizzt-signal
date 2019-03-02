@@ -80,6 +80,8 @@ public class AuthResource {
 			transTable.put("设置", Const.CALL_RESULT_4);
 			transTable.put("未开通", Const.CALL_RESULT_4);
 			transTable.put("语音服务", Const.CALL_RESULT_4);
+			transTable.put("电话已过期", Const.CALL_RESULT_4);
+			transTable.put("用户线路故障", Const.CALL_RESULT_4);
 			transTable.put("关机", Const.CALL_RESULT_5);
 			transTable.put("已关", Const.CALL_RESULT_5);
 			transTable.put("提醒", Const.CALL_RESULT_8);
