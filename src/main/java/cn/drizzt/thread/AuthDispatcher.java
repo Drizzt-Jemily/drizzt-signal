@@ -61,6 +61,11 @@ public class AuthDispatcher implements Runnable {
 				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x1100, 0x3b0000);
 				LOGGER.info("空闲通道：" + ch);
 				if (ch != -1) {
+					try {
+						Thread.sleep(150);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 //					String called = getCalled();
 //					waitAuth.setCalled(called);
 					waitAuth.setCh(ch);

@@ -64,15 +64,19 @@ public class AuthResource {
 			transTable.put("不再使用", Const.CALL_RESULT_6);
 			transTable.put("不在使用", Const.CALL_RESULT_6);
 			transTable.put("语音通话", Const.CALL_RESULT_6);
+			transTable.put("已过期", Const.CALL_RESULT_6);
+			transTable.put("不在使用中", Const.CALL_RESULT_6);
 			transTable.put("欠费", Const.CALL_RESULT_7);
 			transTable.put("停机", Const.CALL_RESULT_7);
 			transTable.put("暂停", Const.CALL_RESULT_7);
 			transTable.put("通话中", Const.CALL_RESULT_3);
 			transTable.put("无法接通", Const.CALL_RESULT_3);
-			transTable.put("无法接听", Const.CALL_RESULT_3);
-			transTable.put("不要挂机", Const.CALL_RESULT_3);
-			transTable.put("用户忙", Const.CALL_RESULT_3);
 			transTable.put("不方便", Const.CALL_RESULT_3);
+			transTable.put("用户正忙", Const.CALL_RESULT_3);
+			transTable.put("对方正忙", Const.CALL_RESULT_3);
+			transTable.put("现在正忙", Const.CALL_RESULT_3);
+			transTable.put("暂时无法", Const.CALL_RESULT_3);
+			transTable.put("接听电话", Const.CALL_RESULT_3);
 			transTable.put("限制", Const.CALL_RESULT_4);
 			transTable.put("设置", Const.CALL_RESULT_4);
 			transTable.put("未开通", Const.CALL_RESULT_4);
@@ -84,6 +88,13 @@ public class AuthResource {
 			transTable.put("秘书", Const.CALL_RESULT_8);
 			transTable.put("呼转", Const.CALL_RESULT_8);
 			transTable.put("转至", Const.CALL_RESULT_8);
+			transTable.put("短信呼", Const.CALL_RESULT_8);
+			transTable.put("滴声后留言", Const.CALL_RESULT_8);
+			transTable.put("语音信箱", Const.CALL_RESULT_8);
+			transTable.put("通信助理", Const.CALL_RESULT_8);
+			transTable.put("呼叫前转", Const.CALL_RESULT_8);
+			transTable.put("来电助手", Const.CALL_RESULT_8);
+			transTable.put("转移到", Const.CALL_RESULT_8);
 
 			// 英文识别
 			transTable.put("乐风原创文艺炮", Const.CALL_RESULT_5);
