@@ -1,6 +1,6 @@
 package cn.drizzt.thread;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +13,7 @@ import cn.drizzt.util.ShUtil;
 @Component
 public class AuthDispatcher implements Runnable {
 	
-	private static Logger LOGGER = Logger.getLogger(AuthDispatcher.class);
+//	private static Logger LOGGER = Logger.getLogger(AuthDispatcher.class);
 
 	@Autowired
 	private AuthResource authResource;
@@ -59,7 +59,7 @@ public class AuthDispatcher implements Runnable {
 //				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x0408, 0xffff);
 //				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x0100, 0x0000);
 				int ch = ShUtil.INSTANCE.SsmSearchIdleCallOutCh(0x1100, 0x3b0000);
-				LOGGER.info("空闲通道：" + ch);
+//				LOGGER.info("空闲通道：" + ch);
 				if (ch != -1) {
 					try {
 						Thread.sleep(150);
@@ -77,7 +77,7 @@ public class AuthDispatcher implements Runnable {
 					ShUtil.INSTANCE.SsmAutoDial(ch, calling+authResource.getCallingIp());
 					authResource.addAuth(waitAuth);
 				}else {
-					LOGGER.info("失败原因：" + ShUtil.INSTANCE.SsmGetLastErrMsgA());
+//					LOGGER.info("失败原因：" + ShUtil.INSTANCE.SsmGetLastErrMsgA());
 				}
 
 			}
