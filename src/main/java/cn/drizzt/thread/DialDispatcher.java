@@ -16,8 +16,9 @@ import cn.drizzt.entity.SignalAuth;
 import cn.drizzt.service.SignalAuthService;
 import cn.drizzt.service.SignalUserService;
 import cn.drizzt.util.Const;
+import cn.drizzt.util.HWUtil;
 import cn.drizzt.util.ShUtil;
-import cn.drizzt.util.VoiceUtil;
+//import cn.drizzt.util.VoiceUtil;
 
 @Component
 public class DialDispatcher implements Runnable {
@@ -199,13 +200,14 @@ public class DialDispatcher implements Runnable {
 				if (signalAuth.getCallResult() == 99) {
 					if (signalAuth.getRecordStatus() == 3) {
 						Long start = System.currentTimeMillis();
-						String translation = VoiceUtil.getTranslation(signalAuth.getId() + ".wav");
+						HWUtil util = new HWUtil();
+						String translation = util.getTranslation(signalAuth.getId() + ".wav");
 
 						// 如果token过期则重新获取
-						if (translation.equals("error3302")) {
-							VoiceUtil.getToken();
-							translation = VoiceUtil.getTranslation(signalAuth.getId() + ".wav");
-						}
+//						if (translation.equals("error3302")) {
+//							VoiceUtil.getToken();
+//							translation = VoiceUtil.getTranslation(signalAuth.getId() + ".wav");
+//						}
 
 						signalAuth.setTranslation(translation);
 						Long end = System.currentTimeMillis();

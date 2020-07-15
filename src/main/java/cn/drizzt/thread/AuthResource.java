@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import cn.drizzt.entity.SignalAuth;
 import cn.drizzt.util.Const;
 import cn.drizzt.util.ShUtil;
-import cn.drizzt.util.VoiceUtil;
+//import cn.drizzt.util.VoiceUtil;
 
 @Component
 public class AuthResource {
@@ -115,7 +115,7 @@ public class AuthResource {
 			transTable.put("早点四十呗", Const.CALL_RESULT_7);
 			transTable.put("射杀yahoo思维", Const.CALL_RESULT_7);
 
-			VoiceUtil.getToken();
+//			VoiceUtil.getToken();
 
 			new Thread(authDispatcher).start();
 			new Thread(dialDispatcher).start();

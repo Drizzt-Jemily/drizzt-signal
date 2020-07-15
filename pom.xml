@@ -4,11 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- mvn clean package -Dmaven.test.skip=true -->
-	<!-- nohup java -jar -Xmx2000m -Xms2000m -Xmn1500m -Xss256k -XX:ErrorFile=/home/drizzt/signal/java_error_%p.log  /home/drizzt/signal/drizzt-signal-1.8.4.jar & -->
+	<!-- nohup java -jar -Xmx2000m -Xms2000m -Xmn1500m -Xss256k -XX:ErrorFile=/home/drizzt/signal/java_error_%p.log 
+		/home/drizzt/signal/drizzt-signal-1.9.4.jar & -->
 
 	<groupId>cn.drizzt</groupId>
 	<artifactId>drizzt-signal</artifactId>
-	<version>1.8.4</version>
+	<version>1.9.4</version>
 	<packaging>jar</packaging>
 
 	<name>drizzt-signal</name>
@@ -108,6 +109,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.25</version>
+		</dependency>
+
+		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
 			<classifier>jdk15</classifier>
@@ -117,22 +124,42 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5</version><!--$NO-MVN-MAN-VER$-->
+			<version>4.5</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
-			<version>4.4.4</version><!--$NO-MVN-MAN-VER$-->
+			<version>4.4.4</version><!--$NO-MVN-MAN-VER$ -->
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<version>4.5</version><!--$NO-MVN-MAN-VER$-->
+			<version>4.5</version><!--$NO-MVN-MAN-VER$ -->
+		</dependency>
+
+		<dependency>
+			<groupId>com.huawei.sis</groupId>
+			<artifactId>huaweicloud-java-sdk-sis</artifactId>
+			<version>1.2.0</version>
 		</dependency>
 
 	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>sis-repo</id>
+			<name>Sis Release Repository</name>
+			<url>https://mirrors.huaweicloud.com/repository/maven/huaweicloudsdk</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
